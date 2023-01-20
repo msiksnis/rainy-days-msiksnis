@@ -1,0 +1,42 @@
+img {
+  max-width: 100%;
+}
+
+.gallery {
+  display: flex;
+  margin: 10px auto;
+  max-width: 600px;
+  position: relative;
+  padding-top: 67%;
+}
+
+.gallery-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.gallery-thumb {
+  padding-top: 6px;
+  margin: 6px;
+  display: block;
+}
+
+.gallery-selector {
+  position: absolute;
+  display: none;
+}
+
+.gallery-selector:checked + .gallery-img {
+  opacity: 1;
+}
+
+@media (min-width: 680px) {
+  .gallery {
+    padding-top: 360px;
+    max-width: 50%;
+    margin-left: -5px;
+  }
+}

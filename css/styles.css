@@ -18,6 +18,10 @@ a {
   display: none;
 }
 
+video {
+  filter: brightness(0.9);
+}
+
 .landing_container {
   position: relative;
   width: 100%;
@@ -110,7 +114,7 @@ a {
 
 /* ---- Homepage ---- */
 .homepage_main {
-  padding: 30px 20px;
+  padding: 30px 20px 80px 20px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
@@ -362,8 +366,22 @@ footer {
     display: none;
   }
 
+  .landing_container {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+  }
+
   .landing-content {
-    font-size: 8rem;
+    top: 5%;
+    font-size: 16vw;
+    text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
+    -webkit-text-stroke: 8px #fff;
+    letter-spacing: 0.8rem;
+  }
+
+  .click {
+    padding-top: 0;
   }
 
   .logo {
@@ -379,7 +397,7 @@ footer {
   }
 
   .homepage_main {
-    padding: 50px 200px;
+    padding: 50px 200px 150px 200px;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 30px 40px;
     align-items: center;

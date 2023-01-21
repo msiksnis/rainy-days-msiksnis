@@ -116,29 +116,32 @@ a {
   gap: 20px;
 }
 
-.car-container {
+.card-container {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   padding-top: 15px;
   border-radius: 5px;
   background: #fff;
   max-width: 250px;
   height: 250px;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.4s ease-in-out;
 }
 
-.car-container:hover {
+.card-container:hover {
   transform: scale(1.01);
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  transition: all 0.3s ease-in-out;
+  transform: translateY(-5px);
 }
 
 .product-image {
   margin: 0 30px;
-  -o-object-fit: contain;
   object-fit: contain;
+  height: 140px;
 }
 
 .product-info {
@@ -175,6 +178,7 @@ a {
   background: #000;
   border-radius: 0 0 5px 5px;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
 .add-to-bag:hover {
@@ -284,11 +288,6 @@ footer {
   height: 1.5em;
 }
 
-.heart > svg:focus {
-  stroke: red;
-  fill: red;
-}
-
 .heart:hover {
   opacity: 100%;
   stroke: red;
@@ -316,6 +315,7 @@ footer {
   width: 40px;
   display: flex;
   justify-content: center;
+  transition: all 0.3s ease-in-out;
 }
 
 .option:hover {
@@ -341,6 +341,7 @@ footer {
   border: none;
   border-radius: 3px;
   box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
 }
 
 .product-to-bag {
@@ -384,7 +385,7 @@ footer {
     align-items: center;
   }
 
-  .car-container {
+  .card-container {
     height: 335px;
   }
 
@@ -403,6 +404,10 @@ footer {
     opacity: 85%;
   }
 
+  .social-icon {
+    transition: all 0.3s ease-in-out;
+  }
+
   .social-icon:hover {
     opacity: 100%;
     transform: scale(1.1);
@@ -412,6 +417,10 @@ footer {
   .footer-links {
     justify-content: space-around;
     letter-spacing: 0.1rem;
+  }
+
+  .footer-nav-link {
+    transition: all 0.3s ease-in-out;
   }
 
   .footer-nav-link:hover {
@@ -442,6 +451,10 @@ footer {
     flex-direction: column;
     justify-content: space-between;
     padding-left: 40px;
+  }
+
+  .product-image {
+    height: 220px;
   }
 
   .product-title {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Rainy Days | Shopping Bag</title>
+    <title>Rainy Days | Payment</title>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Poppins:wght@200;300;400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body>
     <header>
@@ -41,7 +41,7 @@
               />
             </svg>
           </a>
-          <a href="">
+          <a href="/shopping-bag.html">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -62,39 +62,53 @@
         </div>
       </nav>
     </header>
-    <main class="bag-container">
-      <p class="bag-title">Shopping Bag (1)</p>
-      <div class="line"></div>
-      <div class="bag-content">
-        <img
-          src="/images/products/Outdoor-Research-Foray-II-GORE-TEX-Jacket-Men's.png"
-          alt="Outdoor Research Foray II GORE-TEX Jacket"
-          class="bag-product-image"
-        />
-        <div class="bag-product-details">
-          <div class="bag-product-title">
-            Outdoor Research Foray II GORE-TEX Jacket - Men's
+    <main class="delivery-container">
+      <div class="progress-bar">
+        <div class="bar-border">
+          <div class="bar">1. Delievry</div>
+        </div>
+        <div class="bar-border bar-border-black">
+          <div class="bar">2. Payment</div>
+        </div>
+        <div class="bar-border">
+          <div class="bar">3. Confirmation</div>
+        </div>
+      </div>
+      <div class="form-container">
+        <div class="form-details">
+          <h1>Card Details</h1>
+        </div>
+        <div class="line"></div>
+        <form class="address-form">
+          <div class="form-group strech">
+            <label for="name">Card Holders Name</label>
+            <input
+              type="text"
+              id="name"
+              required
+              placeholder="Card Holders Name"
+            />
           </div>
-          <div class="price">$225.00</div>
-        </div>
+          <div class="form-group strech">
+            <label for="card number">Card Number</label>
+            <input
+              type="text"
+              id="card number"
+              required
+              placeholder="Card Number"
+            />
+          </div>
+          <div class="form-group">
+            <label for="expire">MM/YY</label>
+            <input type="text" id="expire" required placeholder="MM/YY" />
+          </div>
+          <div class="form-group">
+            <label for="cvc">CVC</label>
+            <input type="text" id="cvc" required placeholder="CVC" />
+          </div>
+        </form>
+        <a class="continue-button" href="/checkout/payment.html"> Continue </a>
       </div>
-      <div class="line"></div>
-      <div class="order-summary">
-        <div class="order">Order Summary</div>
-        <div class="subtotal-price">
-          <div class="subtotal">Subtotal</div>
-          <div class="price">$225.00</div>
-        </div>
-        <div class="shipping-price">
-          <div class="shipping">Shipping</div>
-          <div class="price">$15.00</div>
-        </div>
-        <div class="total-price">
-          <div class="total">Total</div>
-          <div class="price">$240.00</div>
-        </div>
-      </div>
-      <a href="/checkout/delivery.html" class="checkout-button">Checkout</a>
     </main>
     <footer class="footer">
       <div class="social-icons">

@@ -350,8 +350,10 @@ footer {
 .product-to-bag,
 .buy-now {
   text-transform: uppercase;
+  text-align: center;
   padding: 7px;
   color: #fff;
+  font-size: 0.9rem;
   letter-spacing: 0.14em;
   border: none;
   border-radius: 3px;
@@ -365,10 +367,6 @@ footer {
 
 .buy-now {
   background-color: var(--rainy-green);
-}
-
-.about-container {
-  margin: 60px 20px 100px 20px;
 }
 
 .about-title,

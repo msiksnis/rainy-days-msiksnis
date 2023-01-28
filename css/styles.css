@@ -57,10 +57,19 @@ video {
 }
 
 /* ---- Header ---- */
+header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: -90px;
+  z-index: 100;
+}
+
 .logo {
   display: flex;
   justify-content: center;
-  margin: 15px 20px;
+  margin: 0 20px;
+  align-items: center;
+  height: 90px;
 }
 
 .logo-img {
@@ -470,11 +479,10 @@ footer {
 }
 
 .checkout-button {
-  margin-top: 100px;
+  margin: 100px;
   text-transform: uppercase;
   padding: 8px;
   width: 100%;
-  max-width: 400px;
   color: #fff;
   text-align: center;
   background-color: #000;
@@ -499,6 +507,7 @@ footer {
 .bar {
   font-size: 0.65rem;
   margin: 6px auto;
+  color: #000;
 }
 
 .bar-border {
@@ -553,7 +562,7 @@ footer {
 .continue-button {
   margin-top: 40px;
   text-transform: uppercase;
-  padding: 8px;
+  padding: 10px;
   color: #fff;
   text-align: center;
   background-color: #000;
@@ -616,8 +625,12 @@ footer {
     padding-top: 0;
   }
 
+  header {
+    top: -110px;
+  }
+
   .logo {
-    margin-bottom: 25px;
+    height: 110px;
   }
 
   .nav {
@@ -792,6 +805,17 @@ footer {
 
   .bag-product-title {
     font-size: 1.2rem;
+  }
+
+  .delivery-container,
+  .payment-container,
+  .confirmation-container {
+    width: 600px;
+    margin: 0 auto;
+  }
+
+  .confetti-container {
+    width: 600px;
   }
 }
 

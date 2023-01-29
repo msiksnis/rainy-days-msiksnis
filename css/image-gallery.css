@@ -36,7 +36,11 @@ img {
 @media (min-width: 680px) {
   .gallery {
     padding-top: 360px;
+  }
+}
+
+@media (min-width: 820px) {
+  .gallery {
     max-width: 50%;
-    margin-left: -5px;
   }
 }

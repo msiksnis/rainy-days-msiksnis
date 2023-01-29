@@ -1,2 +1,1 @@
-# rainy-days-first
-# rainy-days-msiksnis
+This is a school project.

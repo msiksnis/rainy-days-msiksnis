@@ -4,6 +4,6 @@
 
 ##### Technologies used: only HTML and CSS
 
-##### The website is resposnsive and should look good on all different size screens
+##### The website is responsive and should look good on all different size screens
 
 ##### All the product images, titles and prices are found at rei.com

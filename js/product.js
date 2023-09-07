@@ -38,7 +38,7 @@ async function fetchProduct() {
     const product = await fetchProductById(productID);
     productDetailsCard(product);
   } catch (error) {
-    errorContainer.innerHTML = message("error", error);
+    console.error(error);
   } finally {
     toggleLoader(false);
   }
@@ -77,7 +77,7 @@ function productDetailsCard(product) {
   allVariants = product.variants; // This saves all variants to a global variable so they can be used later for filtering
 
   let uniqueColors = [
-    ...new Set(product.variants.map((variant) => variant.color.name)),
+    ...new Set(product.variants.map((variant) => variant.color.value)),
   ]; // Creates an array of unique colors from the variants array
 
   let colorHTML = uniqueColors
@@ -103,7 +103,7 @@ function productDetailsCard(product) {
   if (uniqueColors.length === 1) {
     document.querySelector(".color").classList.add("selected");
     potentialVariants = allVariants.filter(
-      (v) => v.color.name === uniqueColors[0]
+      (v) => v.color.value === uniqueColors[0]
     );
   }
 
@@ -128,7 +128,7 @@ function resetAllColors() {
 
 function filterSizesByColor(selectedColor) {
   const availableSizes = allVariants
-    .filter((v) => v.color.name === selectedColor)
+    .filter((v) => v.color.value === selectedColor)
     .map((v) => v.size.value); // This creates an array of sizes that are available for the selected color
 
   document.querySelectorAll(".size-option").forEach((sizeDiv) => {
@@ -150,7 +150,7 @@ function addColorAndSizeFilterListeners() {
 
       // Store potential variants that match the selected color
       potentialVariants = allVariants.filter(
-        (v) => v.color.name === selectedColor
+        (v) => v.color.value === selectedColor
       );
 
       filterSizesByColor(selectedColor);
@@ -164,7 +164,8 @@ function addColorAndSizeFilterListeners() {
       if (!selectedColor && document.querySelectorAll(".color").length === 1) {
         document.querySelector(".color").classList.add("selected");
         potentialVariants = allVariants.filter(
-          (v) => v.color.name === document.querySelector(".color").dataset.color
+          (v) =>
+            v.color.value === document.querySelector(".color").dataset.color
         );
       }
       if (this.classList.contains("selected")) {

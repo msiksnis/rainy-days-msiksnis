@@ -1,6 +1,10 @@
 import { fetchProductById } from "../api.js";
 import { setFavoriteIcon } from "./favorite.js";
-import { displayError } from "./messages.js";
+import {
+  displayError,
+  showTemporaryWarningMessage,
+  showWarningMessage,
+} from "./messages.js";
 
 const modal = document.getElementById("quick-look-modal");
 const modalContent = document.querySelector(".modal-content");
@@ -11,17 +15,30 @@ let selectedVariantID = null;
 
 function addToBag(product) {
   let bag = JSON.parse(localStorage.getItem("bag") || "[]");
-  let existingItem = bag.find((item) => item.variantID === product.variantID);
+  let existingItem = bag.find((item) => item.variantID === product.variantID); // Checks if the product variant is already in the bag
 
   if (existingItem) {
-    existingItem.quantity++;
+    // Show a message if the item is already in the bag
+    showTemporaryWarningMessage("This product is already in the bag.");
   } else {
+    // Add the product to the bag with a quantity of 1
     product.quantity = 1;
     bag.push(product);
+    localStorage.setItem("bag", JSON.stringify(bag));
   }
-
-  localStorage.setItem("bag", JSON.stringify(bag));
 }
+
+modal.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+}); // Checks if the clicked element is the modal itself and if so, closes the modal
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && modal.style.display === "block") {
+    modal.style.display = "none";
+  }
+}); // Checks if the escape key is pressed and if the modal is open, closes the modal
 
 document.addEventListener("click", function (event) {
   if (event.target.matches(".quick-look-button")) {
@@ -50,7 +67,7 @@ async function populateModal(productId) {
     allVariants = product.variants;
 
     let uniqueColors = [
-      ...new Set(allVariants.map((variant) => variant.color.name)),
+      ...new Set(allVariants.map((variant) => variant.color.value)),
     ];
     let uniqueSizes = [
       ...new Set(allVariants.map((variant) => variant.size.value)),
@@ -150,7 +167,7 @@ async function populateModal(productId) {
     if (uniqueColors.length === 1) {
       document.querySelector(".color").classList.add("selected");
       potentialVariants = allVariants.filter(
-        (v) => v.color.name === uniqueColors[0]
+        (v) => v.color.value === uniqueColors[0]
       );
     }
 
@@ -172,7 +189,7 @@ function addColorAndSizeFilterListeners() {
 
       // Store potential variants that match the selected color
       potentialVariants = allVariants.filter(
-        (v) => v.color.name === selectedColor
+        (v) => v.color.value === selectedColor
       );
 
       filterSizesByColor(selectedColor);
@@ -186,7 +203,8 @@ function addColorAndSizeFilterListeners() {
       if (!selectedColor && document.querySelectorAll(".color").length === 1) {
         document.querySelector(".color").classList.add("selected");
         potentialVariants = allVariants.filter(
-          (v) => v.color.name === document.querySelector(".color").dataset.color
+          (v) =>
+            v.color.value === document.querySelector(".color").dataset.color
         );
       }
       if (this.classList.contains("selected")) {
@@ -234,7 +252,7 @@ function resetAllColors() {
 
 function filterSizesByColor(selectedColor) {
   const availableSizes = allVariants
-    .filter((v) => v.color.name === selectedColor)
+    .filter((v) => v.color.value === selectedColor)
     .map((v) => v.size.value); // This creates an array of sizes that are available for the selected color
 
   document.querySelectorAll(".size-option").forEach((sizeDiv) => {
@@ -255,16 +273,17 @@ function hideWarningMessage() {
   container.classList.add("hidden");
 }
 
-function checkSelectionsAndProceed(addToBagButtonName, productId) {
+function checkSelectionsAndProceed(productId) {
   const selectedColor = document.querySelector(".color.selected");
   const selectedSize = document.querySelector(".size-option.selected");
 
   if (!selectedColor || !selectedSize) {
-    displayWarningMessage();
-    return;
-  }
+    showWarningMessage("Please select a color and size.");
 
-  hideWarningMessage();
+    return;
+  } else {
+    hideWarningMessage();
+  }
 
   // Make sure you are retrieving these values correctly
   const productTitle = document.getElementById(

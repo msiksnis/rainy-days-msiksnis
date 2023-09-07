@@ -133,11 +133,11 @@ header {
 
 .links > a {
   opacity: 0.7;
-}
 
-.links > a:hover {
-  opacity: 1;
-  transition: all 0.2s ease-in-out;
+  &:hover {
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+  }
 }
 
 .links-left > a {
@@ -464,11 +464,11 @@ footer {
   width: 1.5em;
   height: 1.5em;
   transition: all 0.3s ease-in-out;
-}
 
-.heart:hover {
-  stroke: red;
-  fill: red;
+  &:hover {
+    stroke: red;
+    fill: red;
+  }
 }
 
 .color-options {
@@ -482,20 +482,17 @@ footer {
 }
 
 .color {
-  transition: all 0.3s ease-in-out;
-}
-
-.color:hover {
-  transform: scale(1.1);
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-.color {
   border-radius: 90%;
   border: 1px solid #000;
   height: 30px;
   width: 30px;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
 }
 
 .size {
@@ -767,11 +764,11 @@ footer {
   border-radius: 3px;
   box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
-}
 
-.checkout-button:hover {
-  background-color: var(--rainy-green);
-  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: var(--rainy-green);
+    transition: all 0.3s ease-in-out;
+  }
 }
 
 .progress-bar {
@@ -847,11 +844,11 @@ footer {
   border-radius: 3px;
   box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
-}
 
-.continue-button:hover {
-  background-color: var(--rainy-green);
-  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: var(--rainy-green);
+    transition: all 0.3s ease-in-out;
+  }
 }
 
 .confirmation {
@@ -979,7 +976,6 @@ footer {
     left: 50%;
     transform: translateX(-50%);
     top: 30px;
-    cursor: pointer;
     opacity: 85%;
   }
 
@@ -988,6 +984,8 @@ footer {
   }
 
   .social-icon {
+    cursor: pointer;
+
     > img {
       width: 30px;
       height: 30px;
@@ -1007,11 +1005,11 @@ footer {
 
   .footer-nav-link {
     transition: all 0.3s ease-in-out;
-  }
 
-  .footer-nav-link:hover {
-    opacity: 1;
-    transition: all 0.3s ease-in-out;
+    &:hover {
+      opacity: 1;
+      transition: all 0.3s ease-in-out;
+    }
   }
 
   .footer-links-left {
@@ -1061,17 +1059,16 @@ footer {
     padding: 10px;
     border: 1px solid #000;
     cursor: pointer;
+
+    &:hover {
+      background-color: #fff;
+      color: #000;
+      transition: all 0.4s ease-in-out;
+    }
   }
 
   .buy-now {
     border: 1px solid var(--rainy-green);
-  }
-
-  .product-to-bag:hover,
-  .buy-now:hover {
-    background-color: #fff;
-    color: #000;
-    transition: all 0.4s ease-in-out;
   }
 
   .about-container {

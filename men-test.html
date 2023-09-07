@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Rainy Days | Womens' Jackets</title>
+    <title>Rainy Days | Men</title>
     <meta charset="UTF-8" />
     <meta
       name="description"
@@ -9,7 +9,7 @@
     />
     <meta
       name="keywords"
-      content="Rainny Days, Clothing for rain, Women rain jackets, Men rain jackets"
+      content="Rainny Days, Clothing for rain, Men rain jackets."
     />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,7 +24,6 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/styles.css" />
-    <link rel="stylesheet" href="./css/modal.css" />
   </head>
   <body>
     <header>
@@ -32,36 +31,34 @@
         <!-- Header component -->
       </div>
     </header>
-    <main data-gender="Female">
+    <main>
       <div class="container">
         <div class="loader">
           <div class="spinner"></div>
         </div>
-        <section class="product-cards">
-          <section class="grid-item template-card" id="template-card">
+        <section class="homepage_main">
+          <section
+            class="grid-item"
+            id="product-template"
+            style="display: none"
+          >
             <div class="card-container">
               <div class="favorite-icon">
                 <span class="material-icons-outlined favorite-product">
                   favorite_border
                 </span>
               </div>
-              <a href="#" class="product-link">
-                <img class="product-image" src="#" alt="" />
+              <a class="product-link">
+                <img class="product-image" />
               </a>
               <div class="product-info">
                 <h1 class="product-name"></h1>
-                <div id="price" class="product-price"></div>
+                <div class="product-price"></div>
               </div>
               <button class="quick-look-button">Quick Look</button>
             </div>
           </section>
         </section>
-        <div id="errorContainer" role="alert"></div>
-        <div id="quick-look-modal" class="modal">
-          <div class="modal-content">
-            <!-- Other product details will populate here -->
-          </div>
-        </div>
       </div>
     </main>
     <footer class="footer">
@@ -72,8 +69,7 @@
 
     <script type="module" src="./js/components/quickLookModal.js"></script>
     <script type="module" src="./js/api.js"></script>
-    <script type="module" src="./js/byGender-products.js"></script>
+    <script type="module" src="./js/male-products.js"></script>
     <script src="./js/components/header.js"></script>
-    <script type="module" src="./js/components/favorite.js"></script>
   </body>
 </html>

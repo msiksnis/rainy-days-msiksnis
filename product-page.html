@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Rainy Days</title>
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content="Rainy Days. Patagonia Torrentshell 3L Jacket."
+    />
+    <meta
+      name="keywords"
+      content="Rainny Days, Clothing for rain, Women rain jackets, Men rain jackets"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Poppins:wght@200;300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/js-image-gallery.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div id="header-container">
+        <!-- Header component -->
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="loader">
+          <div class="spinner"></div>
+        </div>
+        <div class="product-page-container">
+          <div class="product-page_main">
+            <h1 id="title" class="product-title mobile">
+              <!-- Product title will be populated here -->
+            </h1>
+            <section class="image-gallery">
+              <div class="main-image">
+                <img id="displayed-image" src="" alt="Main product image" />
+              </div>
+              <div class="thumbnails">
+                <!-- Thumbnails will be populated here -->
+              </div>
+            </section>
+            <div class="desktop-section">
+              <div>
+                <h1 id="title" class="product-title desktop">
+                  <!-- Product title for desktop will be populated here -->
+                </h1>
+                <div class="price-heart">
+                  <div id="price" class="price">
+                    <!-- Product price will be populated here -->
+                  </div>
+                  <div class="heart">
+                    <span class="material-icons-outlined favorite-product">
+                      favorite_border
+                    </span>
+                  </div>
+                </div>
+                <div class="select-color-options">
+                  <div id="color" class="colors">
+                    <!-- Colors will be populated here -->
+                  </div>
+                </div>
+                <div class="select-size-options">
+                  <div id="size" class="size-options">
+                    <!-- Sizes will be populated here -->
+                  </div>
+                </div>
+                <div id="warning-message-container" role="alert"></div>
+              </div>
+              <div class="product-page-buttons">
+                <button id="add-to-bag-button" class="product-to-bag">
+                  Add To Bag
+                </button>
+                <a
+                  id="buy-now-button"
+                  href="/shopping-bag.html"
+                  class="buy-now"
+                >
+                  Buy Now
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-description">
+            <p id="description">
+              <!-- Product description will be populated here -->
+            </p>
+          </div>
+
+          <div id="errorContainer" role="alert">
+            <div class="error-message"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div id="footer-container">
+        <!-- Footer component -->
+      </div>
+    </footer>
+
+    <script type="module" src="../js/product.js"></script>
+    <script src="../js/components/header.js"></script>
+    <script type="module" src="./js/components/favorite.js"></script>
+  </body>
+</html>

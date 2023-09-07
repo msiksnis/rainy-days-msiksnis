@@ -1,0 +1,55 @@
+.modal-product-details-container {
+  display: flex;
+  gap: 20px;
+}
+
+.modal-product-image {
+  height: 450px;
+  width: 40%;
+  aspect-ratio: 4/3;
+}
+
+.modal-product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.modal-product-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 60%;
+}
+
+.modal-product-title-close {
+  display: flex;
+  justify-content: space-between;
+}
+
+#modal-product-title {
+  font-size: 1.4rem;
+}
+
+#modal-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+#modal-variants {
+  margin-top: -20px;
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+}
+
+.modal-color-options,
+.modal-size-options {
+  display: flex;
+  gap: 10px;
+  font-weight: 300;
+}

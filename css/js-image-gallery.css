@@ -1,0 +1,25 @@
+.image-gallery {
+  text-align: center;
+}
+
+.main-image img {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+.thumbnails img {
+  max-width: 75px;
+  max-height: 75px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.thumbnails img:hover {
+  border: 1px solid #000;
+}
+
+@media (min-width: 820px) {
+  .image-gallery {
+    max-width: 50%;
+  }
+}

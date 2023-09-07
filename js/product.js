@@ -3,6 +3,7 @@ import {
   showWarningMessage,
   hideWarningMessage,
   showTemporaryWarningMessage,
+  displayError,
 } from "./components/messages.js";
 import { setFavoriteIcon } from "./components/favorite.js";
 
@@ -14,6 +15,7 @@ const sizeOptions = document.querySelector(".select-size-options #size");
 const loader = document.querySelector(".loader");
 const title = document.querySelector("title");
 const description = document.querySelector("#description");
+const container = document.querySelector(".container");
 
 let allVariants = []; // For all available product variants
 let potentialVariants = []; // Variants that match the currently selected color
@@ -38,7 +40,7 @@ async function fetchProduct() {
     const product = await fetchProductById(productID);
     productDetailsCard(product);
   } catch (error) {
-    console.error(error);
+    container.innerHTML = displayError();
   } finally {
     toggleLoader(false);
   }

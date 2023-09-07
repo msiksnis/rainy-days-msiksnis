@@ -1,6 +1,9 @@
 function errorMessage(type = "error", message) {
   return `<div class="${type}">${message}</div>`;
 }
+export function displayError(message = "Oops... Something went wrong.") {
+  return `<div class="error-message">${message}</div>`;
+}
 
 export function showWarningMessage(message) {
   const container = document.querySelector("#warning-message-container");

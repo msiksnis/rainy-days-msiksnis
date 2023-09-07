@@ -1,8 +1,9 @@
 import { fetchFeaturedProducts } from "./api.js";
 import { setFavoriteIcon } from "./components/favorite.js";
-import { fetchError } from "./components/messages.js";
+import { displayError } from "./components/messages.js";
 
 const loader = document.querySelector(".loader");
+const container = document.querySelector(".container");
 
 function toggleLoader(show) {
   loader.style.display = show ? "block" : "none";
@@ -14,7 +15,7 @@ async function allFeaturedProducts() {
     const featuredProducts = await fetchFeaturedProducts();
     populateProductCards(featuredProducts);
   } catch (error) {
-    fetchError("Failed to fetch featured products");
+    container.innerHTML = displayError();
   } finally {
     toggleLoader(false);
   }
@@ -43,8 +44,6 @@ function populateProductCards(featuredProducts) {
 
     productCardsContainer.appendChild(newCard);
   });
-
-  templateCard.style.display = "none"; // Hiding the template card
 }
 
 allFeaturedProducts();

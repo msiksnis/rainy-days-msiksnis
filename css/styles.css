@@ -8,6 +8,9 @@ body {
   font-family: "Poppins", sans-serif;
   max-width: 1440px;
   background-color: #f2f0eb;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
 }
 
 .container {
@@ -40,14 +43,14 @@ video {
 }
 
 .error-message {
-  background-color: #f44336;
-  color: white;
+  max-width: fit-content;
+  color: red;
   padding: 14px 20px;
-  margin: 14px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
+  margin: 14px auto;
+  border: 1px solid red;
+  background-color: rgba(255, 0, 0, 0.135);
+  border-radius: 3px;
+  opacity: 0.8;
 }
 
 .hidden {
@@ -228,6 +231,10 @@ header {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+}
+
+#template-card {
+  display: none;
 }
 
 .grid-item {

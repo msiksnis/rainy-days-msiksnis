@@ -1,8 +1,10 @@
 import { fetchProductById } from "../api.js";
 import { setFavoriteIcon } from "./favorite.js";
+import { displayError } from "./messages.js";
 
 const modal = document.getElementById("quick-look-modal");
 const modalContent = document.querySelector(".modal-content");
+const container = document.querySelector(".container");
 let allVariants = [];
 let potentialVariants = [];
 let selectedVariantID = null;
@@ -29,11 +31,17 @@ document.addEventListener("click", function (event) {
         modal.style.display = "block";
       })
       .catch((error) => {
-        console.error("Error:", error);
-        // Display user-friendly error message here
+        document.addEventListener("click", function (event) {
+          if (event.target.matches(".quick-look-button")) {
+            const productId = event.target.getAttribute("data-product-id");
+            populateModal(productId).then(() => {
+              modal.style.display = "block";
+            });
+          }
+        }); // This adds an event listener to the document that listens for a click on the quick look button
       });
   }
-});
+}); // This adds an event listener to the document that listens for a click on the quick look button
 
 async function populateModal(productId) {
   try {
@@ -148,7 +156,7 @@ async function populateModal(productId) {
 
     addColorAndSizeFilterListeners();
   } catch (error) {
-    console.error("Error fetching product details:", error);
+    container.innerHTML = displayError();
     throw error;
   }
 }
@@ -206,22 +214,8 @@ function addColorAndSizeFilterListeners() {
       if (selectedColor && this.classList.contains("selected")) {
         hideWarningMessage();
       }
-
-      logSelectedItems();
     });
   });
-}
-
-function logSelectedItems() {
-  const selectedColor = document.querySelector(".color.selected");
-  const selectedSize = document.querySelector(".size-option.selected");
-
-  const selectedColorValue = selectedColor ? selectedColor.dataset.color : null;
-  const selectedSizeValue = selectedSize ? selectedSize.dataset.size : null;
-
-  console.log("Selected Color:", selectedColorValue);
-  console.log("Selected Size:", selectedSizeValue);
-  console.log("Selected Variant ID:", selectedVariantID);
 }
 
 function resetAllSizes() {

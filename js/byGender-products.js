@@ -1,7 +1,9 @@
 import { fetchProducts } from "./api.js";
 import { setFavoriteIcon } from "./components/favorite.js";
+import { displayError } from "./components/messages.js";
 
 const loader = document.querySelector(".loader");
+const container = document.querySelector(".container");
 
 function toggleLoader(show) {
   loader.style.display = show ? "block" : "none";
@@ -23,7 +25,7 @@ async function fetchAndFilterProducts() {
     );
     populateProductCards(genderSpecificProducts);
   } catch (error) {
-    console.error("Error:", error);
+    container.innerHTML = displayError();
   } finally {
     toggleLoader(false);
   }
@@ -52,8 +54,6 @@ function populateProductCards(genderSpecificProducts) {
 
     productCardsContainer.appendChild(newCard);
   });
-
-  templateCard.style.display = "none"; // Hiding the template card
 }
 
 fetchAndFilterProducts();

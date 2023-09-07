@@ -1,9 +1,10 @@
-// favorite-page.js
 import { fetchProductById } from "./api.js";
+import { displayError } from "./components/messages.js";
 
 const loader = document.querySelector(".loader");
 const favoritesContainer = document.getElementById("favorite-cards");
 let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+const container = document.querySelector(".container");
 
 function showLoader() {
   loader.style.display = "block";
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const product = await fetchProductById(productId);
         favoriteProducts.push(product);
       } catch (error) {
-        console.error(`Failed to fetch product with ID ${productId}: ${error}`);
+        container.innerHTML = displayError();
       } finally {
         hideLoader();
       }

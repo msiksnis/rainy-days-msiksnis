@@ -39,7 +39,26 @@
           <div class="spinner"></div>
         </div>
         <section id="favorite-cards">
-          <!-- Favorite Product cards here -->
+          <!-- Template Card for Favorite Product -->
+          <section class="grid-item template-card" id="template-card">
+            <div class="card-container">
+              <div class="favorite-icon">
+                <span
+                  class="material-icons-outlined favorite-product favorite-solid"
+                >
+                  favorite
+                </span>
+              </div>
+              <a href="#" class="product-link">
+                <img class="product-image" src="#" alt="" />
+              </a>
+              <div class="product-info">
+                <h1 class="product-name"></h1>
+                <div class="product-price"></div>
+              </div>
+              <button class="quick-look-button">Quick Look</button>
+            </div>
+          </section>
         </section>
       </div>
     </main>
@@ -50,7 +69,6 @@
     </footer>
 
     <script src="./js/components/header.js"></script>
-    <script type="module" src="./js/components/favorite.js"></script>
     <script type="module" src="./js/favorite-page.js"></script>
     <script src="./js/components/footer.js"></script>
   </body>

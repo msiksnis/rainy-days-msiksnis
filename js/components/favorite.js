@@ -1,10 +1,9 @@
 // js/components/favorite.js
 
-// Initialize favorites list from Local Storage
 let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 
 // Function to toggle favorite status
-function toggleFavorite(productId) {
+export function toggleFavorite(productId) {
   const index = favorites.indexOf(productId);
 
   if (index === -1) {

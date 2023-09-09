@@ -1,88 +1,70 @@
 import { fetchProductById } from "./api.js";
+import { setFavoriteIcon } from "./components/favorite.js";
 import { displayError } from "./components/messages.js";
 
 const loader = document.querySelector(".loader");
 const favoritesContainer = document.getElementById("favorite-cards");
-let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 const container = document.querySelector(".container");
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 
-function showLoader() {
-  loader.style.display = "block";
+function toggleLoader(show) {
+  loader.style.display = show ? "block" : "none";
 }
 
-function hideLoader() {
-  loader.style.display = "none";
-}
-
-function toggleFavorite(productId) {
-  const index = favorites.indexOf(productId);
-
-  if (index === -1) {
-    favorites.push(productId);
-  } else {
-    favorites.splice(index, 1);
+async function fetchAndRenderFavorites() {
+  toggleLoader(true);
+  try {
+    const favoriteProducts = await Promise.all(favorites.map(fetchProductById));
+    populateFavoriteCards(favoriteProducts);
+  } catch (error) {
+    container.innerHTML = displayError();
+    console.error(error);
+  } finally {
+    toggleLoader(false);
   }
-
-  localStorage.setItem("favorites", JSON.stringify(favorites));
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  async function renderFavorites() {
-    // Fetch the details of each favorite product from the API
-    const favoriteProducts = [];
+function populateFavoriteCards(favoriteProducts) {
+  const templateCard = document.getElementById("template-card");
 
-    for (const productId of favorites) {
-      showLoader();
-      try {
-        const product = await fetchProductById(productId);
-        favoriteProducts.push(product);
-      } catch (error) {
-        container.innerHTML = displayError();
-      } finally {
-        hideLoader();
-      }
-    }
+  favoriteProducts.forEach((product) => {
+    // To clone the template card to create a new card for each product
+    const newCard = templateCard.cloneNode(true);
+    newCard.removeAttribute("id");
 
-    // Generate the HTML for each favorite product
-    const favoriteHTML = favoriteProducts
-      .map(
-        (product) => `
-      <section class="grid-item">
-        <div class="card-container">
-          <div class="favorite-icon">
-            <span class="material-icons-outlined favorite-product favorite-solid" data-product-id="${product.id}">
-            favorite
-            </span>
-          </div>
-          <a href="product-page.html?productId=${product.id}">
-            <img class="product-image" src="${product.images[0].url}" alt="${product.name}" />
-          </a>
-          <div class="product-info">
-            <h1>${product.name}</h1>
-            <div class="product-price">$${product.price}</div>
-          </div>
-          <button class="quick-look-button" data-product-id="${product.id}">Quick Look</button>
-        </div>
-      </section>
-    `
-      )
-      .join("");
+    const favoriteIcon = newCard.querySelector(".favorite-product"); // Selecting the favorite icon in the new card
+    favoriteIcon.setAttribute("data-product-id", product.id); // Setting the data-product-id attribute to the product id
+    setFavoriteIcon(favoriteIcon, product.id); // Setting the favorite icon to the correct state
 
-    // Update the DOM
-    favoritesContainer.innerHTML = favoriteHTML;
-  }
+    newCard.querySelector(
+      ".product-link"
+    ).href = `product-page.html?productId=${product.id}`;
+    newCard.querySelector(".product-image").src = product.images[0].url;
+    newCard.querySelector(".product-image").alt = product.name;
+    newCard.querySelector(".product-name").textContent = product.name;
+    newCard.querySelector(".product-price").textContent = `$${product.price}`;
+    newCard.querySelector(".quick-look-button").dataset.productId = product.id;
 
-  favoritesContainer.addEventListener("click", async function (e) {
-    if (e.target.classList.contains("favorite-product")) {
-      const productId = e.target.getAttribute("data-product-id");
-
-      // Toggle the favorite status of the clicked product
-      toggleFavorite(productId);
-
-      // Re-render the favorite products
-      await renderFavorites();
-    }
+    favoritesContainer.appendChild(newCard);
   });
+}
 
-  renderFavorites();
+fetchAndRenderFavorites();
+
+// This part is for removing product from local storage and DOM  when unfavorited
+favoritesContainer.addEventListener("click", (event) => {
+  if (event.target.matches(".favorite-product")) {
+    const productId = event.target.getAttribute("data-product-id");
+    const productCard = event.target.closest(".grid-item"); // Gets the parent product card of the clicked favorite icon
+
+    // Remove the product from the favorites list in local storage by filtering it out of the array and saving the new array to local storage
+    const index = favorites.indexOf(productId);
+    if (index !== -1) {
+      favorites.splice(index, 1);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+
+    // Remove the product card from the DOM
+    productCard.remove();
+  }
 });

@@ -8,7 +8,7 @@ import {
 import { setFavoriteIcon } from "./components/favorite.js";
 
 const productID = getProductIdFromUrl();
-const productTitles = document.querySelectorAll("#title");
+const productTitles = document.querySelectorAll(".product-title");
 const price = document.querySelector("#price");
 const colors = document.querySelector("#color");
 const sizeOptions = document.querySelector(".select-size-options #size");

@@ -1,3 +1,5 @@
+// byGender-products.js
+
 import { fetchProducts } from "./api.js";
 import { setFavoriteIcon } from "./components/favorite.js";
 import { displayError } from "./components/messages.js";
@@ -10,7 +12,7 @@ function toggleLoader(show) {
 }
 
 function getGenderFromPage() {
-  const mainElement = document.querySelector("main"); // Selects the main element where gender is set
+  const mainElement = document.querySelector("main"); // Selects the main tag where gender is set
 
   return mainElement.getAttribute("data-gender"); // Gets the gender from the data-gender attribute
 }

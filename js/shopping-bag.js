@@ -1,61 +1,49 @@
 let bag = JSON.parse(localStorage.getItem("bag") || "[]");
 
 document.addEventListener("DOMContentLoaded", function () {
-  const bagContainer = document.querySelector(".bag-container");
-  const bagTitle = document.querySelector(".bag-title");
   const bagContent = document.querySelector(".bag-content");
+  const bagTitle = document.querySelector(".bag-title");
   const subtotalElement = document.querySelector(".subtotal-price .price");
   const totalElement = document.querySelector(".total-price .price");
   const shippingElement = document.querySelector(".shipping-price .price");
-  const SHIPPING_COST = 15.0; // Hard-coded shipping cost
-  let bag = JSON.parse(localStorage.getItem("bag") || "[]");
+  const SHIPPING_COST = 15.0;
 
   function renderBagItems() {
     let subtotal = 0;
     let totalItems = 0;
-    let bagHTML = bag
-      .map((item) => {
-        let itemPrice = parseFloat(item.price.replace("$", ""));
-        totalItems += item.quantity;
-        let itemSubtotal = itemPrice * item.quantity;
-        subtotal += itemSubtotal;
-        return `
-                <div class="bag-item" data-id="${item.variantID}">
-                <div class="bag-product-image-container">
-                    <img src="${item.image}" alt="${
-          item.name
-        }" class="bag-product-image" />
-                </div>
-                    <div class="bag-product-details">
-                        <div class="bag-product-title">${item.name}</div>
-                          <div class="bag-product-variant">
-                            <div class="variant" style="background-color: ${
-                              item.color
-                            }"></div>
-                            <div class="variant">${item.size}</div>
-                          </div>
-                        <div class="bag-product-count-price">
-                          <div class="bag-product-quantity">
-                              <div class="bag-product-quantity-minus">-</div>
-                                  ${item.quantity}
-                              <div class="bag-product-quantity-plus">+</div>
-                          </div>
-                          <div class="price">$${itemSubtotal.toFixed(2)}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-      })
-      .join("");
-    bagContent.innerHTML = bagHTML;
 
-    // Updates order summary
+    // Loopes through the bag array and renders each items to the DOM
+    bag.forEach((item) => {
+      const template = document
+        .querySelector(".bag-item-template")
+        .content.firstElementChild.cloneNode(true);
+      template.dataset.id = item.variantID;
+      const itemPrice = parseFloat(item.price.replace("$", ""));
+      totalItems += item.quantity;
+      const itemSubtotal = itemPrice * item.quantity;
+      subtotal += itemSubtotal;
+
+      template.querySelector(".bag-product-image").src = item.image;
+      template.querySelector(".bag-product-image").alt = item.name;
+      template.querySelector(".bag-product-title").textContent = item.name;
+      template.querySelector(".variant").style.backgroundColor = item.color;
+      template.querySelector(".variant:nth-child(2)").textContent = item.size;
+      template.querySelector(".quantity-value").textContent = item.quantity;
+      template.querySelector(".price").textContent = `$${itemSubtotal.toFixed(
+        2
+      )}`;
+
+      bagContent.appendChild(template);
+    });
+
+    // For updating the order summary details
     bagTitle.textContent = `Shopping Bag (${totalItems})`;
     subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
     totalElement.textContent = `$${(subtotal + SHIPPING_COST).toFixed(2)}`;
     shippingElement.textContent = `$${SHIPPING_COST.toFixed(2)}`;
   }
 
+  // Event listener to handle quantity when increment or decrement buttons are clicked
   bagContent.addEventListener("click", function (e) {
     let itemId;
     if (e.target.classList.contains("bag-product-quantity-minus")) {
@@ -67,23 +55,61 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  // This function for recalculating the totals when the quantity is changed
+  function calculateTotals() {
+    let subtotal = 0;
+    let totalItems = 0;
+
+    bag.forEach((item) => {
+      const itemPrice = parseFloat(item.price.replace("$", ""));
+      totalItems += item.quantity;
+      subtotal += itemPrice * item.quantity;
+    });
+
+    // For updating the DOM elements with the new totals
+    bagTitle.textContent = `Shopping Bag (${totalItems})`;
+    subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+    totalElement.textContent = `$${(subtotal + SHIPPING_COST).toFixed(2)}`;
+  }
+
+  // Function to adjust the quantity of an item
   function adjustItemQuantity(variantID, action) {
     let itemIndex = bag.findIndex((item) => item.variantID === variantID);
 
     if (itemIndex !== -1) {
+      let item = bag[itemIndex];
       if (action === "increment") {
-        bag[itemIndex].quantity++;
-      } else if (action === "decrement") {
-        if (bag[itemIndex].quantity > 1) {
-          bag[itemIndex].quantity--;
+        item.quantity++;
+      } else if (action === "decrement" && item.quantity > 1) {
+        item.quantity--;
+      } else if (action === "decrement" && item.quantity === 1) {
+        bag.splice(itemIndex, 1);
+      }
+
+      // Update local storage with the new bag content
+      localStorage.setItem("bag", JSON.stringify(bag));
+
+      // Updates the DOM for this specific item variant
+      const itemElement = bagContent.querySelector(
+        `.bag-item[data-id="${variantID}"]`
+      );
+      if (itemElement) {
+        const updatedItem = bag.find((i) => i.variantID === variantID);
+        if (!updatedItem) {
+          // IRemoves the item from DOM if it doesn't exist in the bag (local storage) anymore
+          itemElement.remove();
         } else {
-          bag.splice(itemIndex, 1); // Removes the item from the bag array
+          const quantityElement = itemElement.querySelector(".quantity-value");
+          const priceElement = itemElement.querySelector(".price");
+          quantityElement.textContent = updatedItem.quantity;
+          const itemPrice = parseFloat(updatedItem.price.replace("$", ""));
+          priceElement.textContent = `$${(
+            itemPrice * updatedItem.quantity
+          ).toFixed(2)}`;
         }
       }
 
-      localStorage.setItem("bag", JSON.stringify(bag));
-      renderBagItems(); // Refresh the display
-
+      calculateTotals();
       updateBagCount();
     }
   }

@@ -475,10 +475,16 @@ footer {
   margin-top: 10px;
 }
 
+.color-name {
+  height: 20px;
+  font-size: 0.8rem;
+  margin-top: 15px;
+  margin-bottom: -5px;
+}
+
 .colors {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .color {
@@ -639,11 +645,9 @@ footer {
 }
 
 .modal-content {
-  margin: 10% auto;
+  margin: 20% auto;
   padding: 25px 20px;
-  max-width: 60%;
   background-color: #fff;
-  border-radius: 5px;
 }
 
 .close-modal {
@@ -673,6 +677,12 @@ footer {
 
 .bag-product-image {
   height: 130px;
+}
+
+.bag-product-title {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin: 0;
 }
 
 .bag-product-count-price {
@@ -711,6 +721,10 @@ footer {
   display: flex;
   align-items: center;
   gap: 15px;
+}
+
+.bag-item-template {
+  display: none;
 }
 
 .variant {
@@ -1102,7 +1116,9 @@ footer {
   }
 
   .bag-product-title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-top: 0;
   }
 
   .delivery-container,
@@ -1124,6 +1140,11 @@ footer {
 
   .mobile {
     display: none;
+  }
+
+  .product-page_main {
+    background-color: #fff;
+    padding: 20px 20px 10px 10px;
   }
 
   .product-cards,
@@ -1149,8 +1170,7 @@ footer {
   }
 
   .bag-product-title {
-    font-size: 1.4rem;
-    margin-right: 20px;
+    font-size: 1.2rem;
   }
 
   .product-page_main,
@@ -1186,6 +1206,12 @@ footer {
     &.product-description {
       margin-bottom: 150px;
     }
+  }
+
+  .modal-content {
+    margin: 10% auto;
+    max-width: 60%;
+    border-radius: 5px;
   }
 }
 

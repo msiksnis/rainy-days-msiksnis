@@ -1,25 +1,25 @@
 .modal-product-details-container {
+  position: relative;
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  padding-bottom: 20px;
 }
 
 .modal-product-image {
-  height: 450px;
-  width: 40%;
-  aspect-ratio: 4/3;
+  height: 250px;
+  object-fit: scale-down;
 }
 
 .modal-product-details {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 }
 
 .modal-product-info {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 60%;
 }
 
 .modal-product-title-close {
@@ -29,6 +29,7 @@
 
 #modal-product-title {
   font-size: 1.4rem;
+  margin-top: 10px;
 }
 
 #modal-price {
@@ -37,7 +38,7 @@
 }
 
 #modal-variants {
-  margin-top: -20px;
+  margin-top: -30px;
 }
 
 .modal-buttons {
@@ -52,4 +53,44 @@
   display: flex;
   gap: 10px;
   font-weight: 300;
+}
+
+.close-modal-mobile {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #fff;
+  border-radius: 100px;
+  padding: 4px;
+}
+
+@media (min-width: 820px) {
+  .modal-product-details-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding-bottom: 0;
+  }
+
+  .modal-product-image {
+    height: 450px;
+    width: 40%;
+    aspect-ratio: 4/3;
+  }
+
+  .modal-product-details {
+    gap: 30px;
+  }
+
+  .modal-product-info {
+    width: 60%;
+  }
+
+  #modal-variants {
+    margin-top: -20px;
+  }
+
+  #modal-product-title {
+    margin-top: 0;
+  }
 }

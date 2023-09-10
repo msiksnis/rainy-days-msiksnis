@@ -9,6 +9,8 @@ import {
 const modal = document.getElementById("quick-look-modal");
 const modalContent = document.querySelector(".modal-content");
 const container = document.querySelector(".container");
+const loader = document.querySelector(".loader");
+
 let allVariants = [];
 let potentialVariants = [];
 let selectedVariantID = null;
@@ -18,10 +20,10 @@ function addToBag(product) {
   let existingItem = bag.find((item) => item.variantID === product.variantID); // Checks if the product variant is already in the bag
 
   if (existingItem) {
-    // Show a message if the item is already in the bag
+    // Shows a message if the item is already in the bag
     showTemporaryWarningMessage("This product is already in the bag.");
   } else {
-    // Add the product to the bag with a quantity of 1
+    // Adds the product to the bag with a quantity of 1
     product.quantity = 1;
     bag.push(product);
     localStorage.setItem("bag", JSON.stringify(bag));
@@ -55,12 +57,17 @@ document.addEventListener("click", function (event) {
               modal.style.display = "block";
             });
           }
-        }); // This adds an event listener to the document that listens for a click on the quick look button
+        });
       });
   }
-}); // This adds an event listener to the document that listens for a click on the quick look button
+}); // Adds an event listener to the document that listens for a click on the quick look button
+
+function toggleLoader(show) {
+  loader.style.display = show ? "block" : "none";
+}
 
 async function populateModal(productId) {
+  toggleLoader(true);
   try {
     const product = await fetchProductById(productId);
 
@@ -86,6 +93,7 @@ async function populateModal(productId) {
 
     const modalHTML = `
       <div class="modal-product-details-container">
+      <span class="material-icons-outlined close-modal-mobile mobile">close</span>
         <img
           src="${product.images[0].url}"
           alt="${product.name}"
@@ -95,7 +103,7 @@ async function populateModal(productId) {
           <div class="modal-product-details">
             <div class="modal-product-title-close">
               <div id="modal-product-title">${product.name}</div>
-              <span class="material-icons-outlined close-modal">close</span>
+              <span class="material-icons-outlined close-modal desktop">close</span>
             </div>
             <div id="modal-price">$${product.price}</div>
             <div class="modal-favorite-icon">
@@ -105,6 +113,7 @@ async function populateModal(productId) {
             </div>
             <div id="modal-variants">
               <div class="select-color-options">
+              <div class="color-name"></div>
                 <div class="colors">
                   <div
                     id="modal-color-options"
@@ -164,17 +173,34 @@ async function populateModal(productId) {
       modal.style.display = "none";
     });
 
+    document
+      .querySelector(".close-modal-mobile")
+      .addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+    // If only one color of the product is available, it will automatically select it and filter the sizes
     if (uniqueColors.length === 1) {
       document.querySelector(".color").classList.add("selected");
       potentialVariants = allVariants.filter(
         (v) => v.color.value === uniqueColors[0]
       );
+
+      // Get the color name of the only available color and set it
+      const colorObj = allVariants.find(
+        (v) => v.color.value === uniqueColors[0]
+      );
+      if (colorObj) {
+        const colorNameElement = document.querySelector(".color-name");
+        colorNameElement.textContent = `Color: ${colorObj.color.name}`;
+      }
     }
 
     addColorAndSizeFilterListeners();
   } catch (error) {
     container.innerHTML = displayError();
-    throw error;
+  } finally {
+    toggleLoader(false);
   }
 }
 
@@ -185,14 +211,24 @@ function addColorAndSizeFilterListeners() {
       this.classList.add("selected");
 
       resetAllSizes();
-      const selectedColor = this.dataset.color;
+      const selectedColorValue = this.dataset.color;
 
       // Store potential variants that match the selected color
       potentialVariants = allVariants.filter(
-        (v) => v.color.value === selectedColor
+        (v) => v.color.value === selectedColorValue
       );
 
-      filterSizesByColor(selectedColor);
+      // Gets the color name of the clicked color and set it
+      const colorObj = allVariants.find((v) => {
+        return v.color.value.trim() === selectedColorValue.trim();
+      });
+
+      if (colorObj) {
+        const colorNameElement = document.querySelector(".color-name");
+        colorNameElement.textContent = `Color: ${colorObj.color.name}`;
+      }
+
+      filterSizesByColor(selectedColorValue);
       selectedVariantID = null; // Reset selected variant since color changed
     });
   });

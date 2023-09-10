@@ -10,6 +10,7 @@ import { setFavoriteIcon } from "./components/favorite.js";
 const productID = getProductIdFromUrl();
 const productTitles = document.querySelectorAll(".product-title");
 const price = document.querySelector("#price");
+const colorName = document.querySelector(".color-name");
 const colors = document.querySelector("#color");
 const sizeOptions = document.querySelector(".select-size-options #size");
 const loader = document.querySelector(".loader");
@@ -78,6 +79,8 @@ function productDetailsCard(product) {
 
   allVariants = product.variants; // This saves all variants to a global variable so they can be used later for filtering
 
+  // Shows selected color name
+
   let uniqueColors = [
     ...new Set(product.variants.map((variant) => variant.color.value)),
   ]; // Creates an array of unique colors from the variants array
@@ -107,6 +110,14 @@ function productDetailsCard(product) {
     potentialVariants = allVariants.filter(
       (v) => v.color.value === uniqueColors[0]
     );
+
+    // Gets the color name of the only available color and set it
+    const colorObj = product.variants.find(
+      (v) => v.color.value === uniqueColors[0]
+    );
+    if (colorObj) {
+      colorName.textContent = `Color: ${colorObj.color.name}`;
+    }
   }
 
   description.textContent = product.description;
@@ -147,6 +158,13 @@ function addColorAndSizeFilterListeners() {
       resetAllColors();
       this.classList.add("selected");
 
+      // Gets the color name of the clicked color and set it
+      const colorObj = allVariants.find(
+        (v) => v.color.value === this.dataset.color
+      );
+      if (colorObj) {
+        colorName.textContent = `Color: ${colorObj.color.name}`;
+      }
       resetAllSizes();
       const selectedColor = this.dataset.color;
 

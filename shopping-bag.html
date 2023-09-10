@@ -37,10 +37,32 @@
       <div class="line"></div>
 
       <!-- Bag Content: Items will be inserted here dynamically -->
-      <div class="bag-content"></div>
+      <div class="bag-content">
+        <template class="bag-item-template">
+          <div class="bag-item">
+            <div class="bag-product-image-container">
+              <img src="" alt="" class="bag-product-image" />
+            </div>
+            <div class="bag-product-details">
+              <h1 class="bag-product-title"></h1>
+              <div class="bag-product-variant">
+                <div class="variant" style="background-color: "></div>
+                <div class="variant"></div>
+              </div>
+              <div class="bag-product-count-price">
+                <div class="bag-product-quantity">
+                  <div class="bag-product-quantity-minus">-</div>
+                  <span class="quantity-value"></span>
+                  <div class="bag-product-quantity-plus">+</div>
+                </div>
+                <div class="price"></div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
 
       <div class="line"></div>
-
       <!-- Order Summary -->
       <div class="order-summary">
         <div class="order">Order Summary</div>

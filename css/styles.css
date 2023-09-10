@@ -14,6 +14,9 @@ body {
 }
 
 .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 
@@ -894,7 +897,10 @@ footer {
 }
 
 .loader {
-  padding: 10% 50% 90% 50%;
+  position: absolute;
+  top: 50%;
+  left: 43%;
+  transform: translateX(-50%);
 }
 
 .loader::after,
@@ -1130,6 +1136,10 @@ footer {
 
   .confetti-container {
     width: 600px;
+  }
+
+  .loader {
+    left: 47%;
   }
 }
 

@@ -32,9 +32,9 @@ function populateFavoriteCards(favoriteProducts) {
     const newCard = templateCard.cloneNode(true);
     newCard.removeAttribute("id");
 
-    const favoriteIcon = newCard.querySelector(".favorite-product"); // Selecting the favorite icon in the new card
-    favoriteIcon.setAttribute("data-product-id", product.id); // Setting the data-product-id attribute to the product id
-    setFavoriteIcon(favoriteIcon, product.id); // Setting the favorite icon to the correct state
+    const favoriteIcon = newCard.querySelector(".favorite-product"); // Selects the favorite icon in the new card
+    favoriteIcon.setAttribute("data-product-id", product.id); // Sets the data-product-id attribute to the product id
+    setFavoriteIcon(favoriteIcon, product.id); // Sets the favorite icon to the correct state
 
     newCard.querySelector(
       ".product-link"
@@ -57,14 +57,14 @@ favoritesContainer.addEventListener("click", (event) => {
     const productId = event.target.getAttribute("data-product-id");
     const productCard = event.target.closest(".grid-item"); // Gets the parent product card of the clicked favorite icon
 
-    // Remove the product from the favorites list in local storage by filtering it out of the array and saving the new array to local storage
+    // Removes the product from the favorites list in local storage by filtering it out of the array and saving the new array to local storage
     const index = favorites.indexOf(productId);
     if (index !== -1) {
       favorites.splice(index, 1);
       localStorage.setItem("favorites", JSON.stringify(favorites));
     }
 
-    // Remove the product card from the DOM
+    // Removes the product card from the DOM
     productCard.remove();
   }
 });

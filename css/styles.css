@@ -991,6 +991,10 @@ footer {
     top: 5px;
   }
 
+  .favorite-page {
+    flex-direction: column;
+  }
+
   .social-icons {
     position: absolute;
     transform: scale(1);

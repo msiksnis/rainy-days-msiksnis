@@ -179,14 +179,14 @@ async function populateModal(productId) {
         modal.style.display = "none";
       });
 
-    // If only one color of the product is available, it will automatically select it and filter the sizes
+    // If only one color of the product is available, it will automatically select that color
     if (uniqueColors.length === 1) {
       document.querySelector(".color").classList.add("selected");
       potentialVariants = allVariants.filter(
         (v) => v.color.value === uniqueColors[0]
       );
 
-      // Get the color name of the only available color and set it
+      // Gets the color name of the only available color and set it
       const colorObj = allVariants.find(
         (v) => v.color.value === uniqueColors[0]
       );
@@ -213,7 +213,7 @@ function addColorAndSizeFilterListeners() {
       resetAllSizes();
       const selectedColorValue = this.dataset.color;
 
-      // Store potential variants that match the selected color
+      // Stores potential variants that match the selected color
       potentialVariants = allVariants.filter(
         (v) => v.color.value === selectedColorValue
       );
@@ -229,7 +229,7 @@ function addColorAndSizeFilterListeners() {
       }
 
       filterSizesByColor(selectedColorValue);
-      selectedVariantID = null; // Reset selected variant since color changed
+      selectedVariantID = null; // Resets selected variant since color changed
     });
   });
 
@@ -245,7 +245,7 @@ function addColorAndSizeFilterListeners() {
       }
       if (this.classList.contains("selected")) {
         this.classList.remove("selected");
-        selectedVariantID = null; // Reset selected variant since size was deselected
+        selectedVariantID = null; // Resets selected variant since size was deselected
       } else {
         document
           .querySelectorAll(".size-option.selected")
@@ -255,7 +255,7 @@ function addColorAndSizeFilterListeners() {
 
         this.classList.add("selected");
 
-        // Determine the selected variant ID based on the selected size
+        // Determines selected variant ID based on the selected size
         const selectedSize = this.dataset.size;
         const variant = potentialVariants.find(
           (v) => v.size.value === selectedSize
@@ -278,7 +278,7 @@ function resetAllSizes() {
     sizeDiv.classList.remove("selected");
     sizeDiv.classList.remove("unavailable");
   });
-} // This resets all sizes to be visible and removes so that they can be filtered again if a different color is selected
+} // This resets all sizes to be visible so that they can be filtered again if a different color is selected
 
 function resetAllColors() {
   document.querySelectorAll(".color").forEach((colorDiv) => {
@@ -321,14 +321,13 @@ function checkSelectionsAndProceed(productId) {
     hideWarningMessage();
   }
 
-  // Make sure you are retrieving these values correctly
   const productTitle = document.getElementById(
     "modal-product-title"
   ).textContent;
   const productImage = document.querySelector(".modal-product-image").src;
   const productPriceText = document.getElementById("modal-price").textContent;
 
-  // Parse the price to remove the dollar sign if necessary
+  // To parse the price to remove the dollar sign
   const productPrice = productPriceText.replace("$", "");
 
   const product = {

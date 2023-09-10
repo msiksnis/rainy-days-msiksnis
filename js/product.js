@@ -79,8 +79,6 @@ function productDetailsCard(product) {
 
   allVariants = product.variants; // This saves all variants to a global variable so they can be used later for filtering
 
-  // Shows selected color name
-
   let uniqueColors = [
     ...new Set(product.variants.map((variant) => variant.color.value)),
   ]; // Creates an array of unique colors from the variants array
@@ -122,7 +120,7 @@ function productDetailsCard(product) {
 
   description.textContent = product.description;
 
-  addColorAndSizeFilterListeners(); // This adds event listeners to the color and size divs so that they can be used for filtering
+  addColorAndSizeFilterListeners(); // This adds event listeners to the color and size
 }
 
 function resetAllSizes() {
@@ -168,7 +166,7 @@ function addColorAndSizeFilterListeners() {
       resetAllSizes();
       const selectedColor = this.dataset.color;
 
-      // Store potential variants that match the selected color
+      // Stores potential variants that match the selected color
       potentialVariants = allVariants.filter(
         (v) => v.color.value === selectedColor
       );
@@ -190,7 +188,7 @@ function addColorAndSizeFilterListeners() {
       }
       if (this.classList.contains("selected")) {
         this.classList.remove("selected");
-        selectedVariantID = null; // Reset selected variant since size was deselected
+        selectedVariantID = null; // Resets selected variant since size was deselected
       } else {
         document
           .querySelectorAll(".size-option.selected")
@@ -200,7 +198,7 @@ function addColorAndSizeFilterListeners() {
 
         this.classList.add("selected");
 
-        // Determine the selected variant ID based on the selected size
+        // Determines the selected variant ID based on the selected size
         const selectedSize = this.dataset.size;
         const variant = potentialVariants.find(
           (v) => v.size.value === selectedSize
@@ -223,7 +221,7 @@ function addToBag(product) {
   let existingItem = bag.find((item) => item.variantID === product.variantID); // Checks if the product variant is already in the bag
 
   if (existingItem) {
-    // Show a message if the item is already in the bag
+    // Shows a message for 5 seconds if the item is already in the bag
     showTemporaryWarningMessage("This product is already in the bag.");
   } else {
     // Add the product to the bag with a quantity of 1
@@ -259,7 +257,7 @@ function checkSelectionsAndProceed(buttonType) {
   let existingItem = bag.find((item) => item.variantID === product.variantID);
 
   if (buttonType === "buyNow" && existingItem) {
-    // If the item is already in the bag and "Buy Now" is clicked, just proceed
+    // If the item is already in the bag and "Buy Now" is clicked, just proceeds
     window.location.href = "/shopping-bag.html";
     return;
   }

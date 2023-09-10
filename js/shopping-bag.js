@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
       bagContent.appendChild(template);
     });
 
-    // For updating the order summary details
+    // Updates the order summary details
     bagTitle.textContent = `Shopping Bag (${totalItems})`;
     subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
     totalElement.textContent = `$${(subtotal + SHIPPING_COST).toFixed(2)}`;
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
         bag.splice(itemIndex, 1);
       }
 
-      // Update local storage with the new bag content
+      // Updates local storage with the new bag content
       localStorage.setItem("bag", JSON.stringify(bag));
 
       // Updates the DOM for this specific item variant
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (itemElement) {
         const updatedItem = bag.find((i) => i.variantID === variantID);
         if (!updatedItem) {
-          // IRemoves the item from DOM if it doesn't exist in the bag (local storage) anymore
+          // Removes the item from DOM if it doesn't exist in the bag (local storage) anymore
           itemElement.remove();
         } else {
           const quantityElement = itemElement.querySelector(".quantity-value");

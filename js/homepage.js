@@ -26,12 +26,12 @@ function populateProductCards(featuredProducts) {
   const productCardsContainer = document.querySelector(".product-cards");
 
   featuredProducts.forEach((product) => {
-    const newCard = templateCard.cloneNode(true); // Cloning the template card to create a new card
-    newCard.removeAttribute("id"); // Removing the id attribute from the new card
+    const newCard = templateCard.cloneNode(true); // Clones the template card to create a new card
+    newCard.removeAttribute("id"); // Removes the id attribute from the new card
 
-    const favoriteIcon = newCard.querySelector(".favorite-product"); // Selecting the favorite icon in the new card
-    favoriteIcon.setAttribute("data-product-id", product.id); // Setting the data-product-id attribute to the product id
-    setFavoriteIcon(favoriteIcon, product.id); // Setting the favorite icon to the correct state
+    const favoriteIcon = newCard.querySelector(".favorite-product"); // Selects the favorite icon in the new card
+    favoriteIcon.setAttribute("data-product-id", product.id); // Sets the data-product-id attribute to the product id
+    setFavoriteIcon(favoriteIcon, product.id); // Sets the favorite icon to the correct state
 
     newCard.querySelector(
       ".product-link"

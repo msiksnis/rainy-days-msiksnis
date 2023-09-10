@@ -1,4 +1,4 @@
-// byGender-products.js
+// This file is for both female and male products page
 
 import { fetchProducts } from "./api.js";
 import { setFavoriteIcon } from "./components/favorite.js";
@@ -12,7 +12,7 @@ function toggleLoader(show) {
 }
 
 function getGenderFromPage() {
-  const mainElement = document.querySelector("main"); // Selects the main tag where gender is set
+  const mainElement = document.querySelector("main"); // Selecting the main tag where gender is set
 
   return mainElement.getAttribute("data-gender"); // Gets the gender from the data-gender attribute
 }

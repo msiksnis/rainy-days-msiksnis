@@ -583,6 +583,10 @@ footer {
   margin-bottom: 40px;
 }
 
+.favorite-title {
+  margin: 40px 0 10px 0;
+}
+
 .about-text,
 .details {
   color: #393939;
@@ -927,6 +931,10 @@ footer {
   opacity: 0.05;
 }
 
+.favorite-page {
+  flex-direction: column;
+}
+
 /* ---- DEESKTOP ---- */
 @media (min-width: 680px) {
   .landing_container {
@@ -989,10 +997,6 @@ footer {
   .favorite-product {
     right: 5px;
     top: 5px;
-  }
-
-  .favorite-page {
-    flex-direction: column;
   }
 
   .social-icons {
@@ -1107,6 +1111,10 @@ footer {
   .favorite-title {
     padding-bottom: 40px;
     font-size: 1.8rem;
+  }
+
+  .favorite-title {
+    padding-bottom: 0;
   }
 
   .about-text {

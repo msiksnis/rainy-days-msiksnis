@@ -566,6 +566,7 @@ footer {
 
 .product-to-bag {
   background-color: #000;
+  padding: 9.5px;
 }
 
 .buy-now {
@@ -1088,12 +1089,17 @@ footer {
     padding: 10px;
     border: 1px solid #000;
     cursor: pointer;
+    transition: all 0.4s ease-in-out;
 
     &:hover {
       background-color: #fff;
       color: #000;
       transition: all 0.4s ease-in-out;
     }
+  }
+
+  .product-to-bag {
+    padding: 12.5px;
   }
 
   .buy-now {

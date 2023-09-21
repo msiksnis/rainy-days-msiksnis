@@ -6,6 +6,7 @@ body {
   margin: 0 auto;
   padding: 0;
   font-family: "Poppins", sans-serif;
+  line-height: 1.5;
   max-width: 1440px;
   background-color: #f2f0eb;
   display: grid;
@@ -319,7 +320,7 @@ header {
   text-overflow: ellipsis;
   margin-top: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
 }
@@ -586,6 +587,10 @@ footer {
 
 .favorite-title {
   margin: 40px 0 10px 0;
+}
+
+.about-container {
+  padding: 50px 20px 100px 20px;
 }
 
 .about-text,
@@ -1108,7 +1113,12 @@ footer {
 
   .about-container {
     margin: 60px auto 100px auto;
-    width: 40%;
+    width: 60%;
+    padding: 0;
+
+    > br {
+      margin-top: 10px;
+    }
   }
 
   .about-title,
@@ -1179,6 +1189,14 @@ footer {
   .product-cards,
   #favorite-cards {
     grid-template-columns: repeat(3, 1fr);
+
+    & > *:nth-child(3n + 1) {
+      margin-top: 30px;
+    }
+
+    & > *:nth-child(3n) {
+      margin-top: 15px;
+    }
   }
 
   .grid-item {
@@ -1253,6 +1271,18 @@ footer {
   #favorite-cards {
     grid-template-columns: repeat(4, 1fr);
     margin: 50px 200px 150px 200px;
+
+    & > *:nth-child(3n + 1) {
+      margin-top: 0;
+    }
+
+    & > *:nth-child(3n) {
+      margin-top: 0;
+    }
+
+    & > :nth-child(even) {
+      margin-top: 15px;
+    }
   }
 
   .grid-item {

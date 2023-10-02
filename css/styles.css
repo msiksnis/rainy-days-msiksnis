@@ -570,6 +570,16 @@ footer {
   padding: 9.5px;
 }
 
+.item-in-bag {
+  /* background-color: #fff;
+  color: #000; */
+  cursor: not-allowed !important;
+  &:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+  }
+}
+
 .buy-now {
   background-color: var(--rainy-green);
 }

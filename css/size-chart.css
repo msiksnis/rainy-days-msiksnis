@@ -1,0 +1,53 @@
+.size-chart-title {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 0 0 10px 20px;
+}
+
+.size-chart {
+  border-collapse: collapse;
+  margin: 0 20px;
+}
+
+.size-chart th,
+.size-chart td {
+  border: 1px solid var(--rainy-green);
+  padding: 10px 25px;
+  text-align: center;
+}
+
+.size-chart thead {
+  background-color: #f2f2f2;
+}
+
+.size-chart thead th {
+  text-transform: uppercase;
+}
+
+.size-chart tbody td {
+  font-size: 0.9em;
+  color: #555;
+}
+
+.size-chart tr:hover {
+  background-color: #f5f5f5;
+  transition: all 0.1s ease-in-out;
+}
+
+.size-chart-notes {
+  font-size: 0.8em;
+  color: #555;
+  margin: 10px 0 80px 20px;
+}
+
+@media (max-width: 680px) {
+  .size-chart-title,
+  .size-chart-notes,
+  .size-chart {
+    margin-left: 10px;
+  }
+
+  .size-chart-title {
+    margin-top: 50px;
+  }
+}

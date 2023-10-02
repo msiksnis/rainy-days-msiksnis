@@ -31,6 +31,20 @@ function toggleLoader(show) {
   loader.style.display = show ? "block" : "none";
 }
 
+function updateAddToBagButton() {
+  const addToBagButton = document.querySelector("#add-to-bag-button");
+  let bag = JSON.parse(localStorage.getItem("bag") || "[]");
+  let existingItem = bag.find((item) => item.variantID === selectedVariantID);
+
+  if (existingItem) {
+    addToBagButton.textContent = "Product already in the Bag";
+    addToBagButton.classList.add("item-in-bag"); // This class can have styles to differentiate it, like a different background color
+  } else {
+    addToBagButton.textContent = "Add to Bag";
+    addToBagButton.classList.remove("item-in-bag");
+  }
+}
+
 function updateMainImage(url) {
   document.querySelector("#displayed-image").src = url;
 }
@@ -121,6 +135,8 @@ function productDetailsCard(product) {
   description.textContent = product.description;
 
   addColorAndSizeFilterListeners(); // This adds event listeners to the color and size
+
+  updateAddToBagButton();
 }
 
 function resetAllSizes() {
@@ -173,6 +189,8 @@ function addColorAndSizeFilterListeners() {
 
       filterSizesByColor(selectedColor);
       selectedVariantID = null; // Resets selected variant if color was changed
+
+      updateAddToBagButton();
     });
   });
 
@@ -211,6 +229,8 @@ function addColorAndSizeFilterListeners() {
       if (selectedColor && this.classList.contains("selected")) {
         hideWarningMessage();
       }
+
+      updateAddToBagButton();
     });
   });
 }
@@ -229,6 +249,8 @@ function addToBag(product) {
     bag.push(product);
     localStorage.setItem("bag", JSON.stringify(bag));
   }
+
+  updateAddToBagButton();
 }
 
 function checkSelectionsAndProceed(buttonType) {

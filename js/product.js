@@ -37,8 +37,8 @@ function updateAddToBagButton() {
   let existingItem = bag.find((item) => item.variantID === selectedVariantID);
 
   if (existingItem) {
-    addToBagButton.textContent = "Product already in the Bag";
-    addToBagButton.classList.add("item-in-bag"); // This class can have styles to differentiate it, like a different background color
+    addToBagButton.textContent = "Product is in the Bag";
+    addToBagButton.classList.add("item-in-bag"); // This is an extra class that is used to style the button differently when the product is already in the bag
   } else {
     addToBagButton.textContent = "Add to Bag";
     addToBagButton.classList.remove("item-in-bag");

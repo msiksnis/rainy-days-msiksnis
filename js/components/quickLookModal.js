@@ -15,6 +15,20 @@ let allVariants = [];
 let potentialVariants = [];
 let selectedVariantID = null;
 
+function updateAddToBagButton() {
+  const addToBagButton = document.querySelector("#add-to-bag");
+  const bag = JSON.parse(localStorage.getItem("bag") || "[]");
+  const existingItem = bag.find((item) => item.variantID === selectedVariantID);
+
+  if (existingItem) {
+    addToBagButton.textContent = "Product is in the Bag";
+    addToBagButton.classList.add("item-in-bag");
+  } else {
+    addToBagButton.textContent = "Add to Bag";
+    addToBagButton.classList.remove("item-in-bag");
+  }
+}
+
 function addToBag(product) {
   let bag = JSON.parse(localStorage.getItem("bag") || "[]");
   let existingItem = bag.find((item) => item.variantID === product.variantID); // Checks if the product variant is already in the bag
@@ -28,6 +42,8 @@ function addToBag(product) {
     bag.push(product);
     localStorage.setItem("bag", JSON.stringify(bag));
   }
+
+  updateAddToBagButton();
 }
 
 modal.addEventListener("click", (event) => {
@@ -135,9 +151,9 @@ async function populateModal(productId) {
               </div>
             </div>
           </div>
-          <div class="modal-buttons">
-            <button id="add-to-bag" class="buy-now">Add To Bag</button>
-            <a href="product-page.html?productId=${product.id}" id="view-more" class="product-to-bag">
+          <div class="product-page-buttons">
+            <button id="add-to-bag" class="product-to-bag">Add To Bag</button>
+            <a href="product-page.html?productId=${product.id}" id="view-more" class="buy-now">
               View More Details
             </a>
           </div>
@@ -202,6 +218,8 @@ async function populateModal(productId) {
   } finally {
     toggleLoader(false);
   }
+
+  updateAddToBagButton();
 }
 
 function addColorAndSizeFilterListeners() {
@@ -230,6 +248,8 @@ function addColorAndSizeFilterListeners() {
 
       filterSizesByColor(selectedColorValue);
       selectedVariantID = null; // Resets selected variant since color changed
+
+      updateAddToBagButton();
     });
   });
 
@@ -268,6 +288,8 @@ function addColorAndSizeFilterListeners() {
       if (selectedColor && this.classList.contains("selected")) {
         hideWarningMessage();
       }
+
+      updateAddToBagButton();
     });
   });
 }

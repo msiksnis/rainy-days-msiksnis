@@ -571,8 +571,6 @@ footer {
 }
 
 .item-in-bag {
-  /* background-color: #fff;
-  color: #000; */
   cursor: not-allowed !important;
   &:hover {
     background-color: #000 !important;

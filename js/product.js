@@ -10,7 +10,6 @@ import { setFavoriteIcon } from "./components/favorite.js";
 const productID = getProductIdFromUrl();
 const productTitles = document.querySelectorAll(".product-title");
 const price = document.querySelector("#price");
-const colorName = document.querySelector(".color-name");
 const colors = document.querySelector("#color");
 const sizeOptions = document.querySelector(".select-size-options #size");
 const loader = document.querySelector(".loader");
@@ -18,9 +17,14 @@ const title = document.querySelector("title");
 const description = document.querySelector("#description");
 const container = document.querySelector(".container");
 
-let allVariants = []; // For all available product variants
-let potentialVariants = []; // Variants that match the currently selected color
-let selectedVariantID = null; // Exact variant ID based on the selected size and color
+function getVariantIdentifier() {
+  const selectedColor = document.querySelector(".color.selected");
+  const selectedSize = document.querySelector(".size-option.selected");
+  if (selectedColor && selectedSize) {
+    return `${productID}-${selectedColor.dataset.color}-${selectedSize.dataset.size}`;
+  }
+  return null;
+}
 
 function getProductIdFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -34,7 +38,9 @@ function toggleLoader(show) {
 function updateAddToBagButton() {
   const addToBagButton = document.querySelector("#add-to-bag-button");
   let bag = JSON.parse(localStorage.getItem("bag") || "[]");
-  let existingItem = bag.find((item) => item.variantID === selectedVariantID);
+  let existingItem = bag.find(
+    (item) => item.variantID === getVariantIdentifier()
+  );
 
   if (existingItem) {
     addToBagButton.textContent = "Product is in the Bag";
@@ -45,8 +51,8 @@ function updateAddToBagButton() {
   }
 }
 
-function updateMainImage(url) {
-  document.querySelector("#displayed-image").src = url;
+function updateMainImage(src) {
+  document.querySelector("#displayed-image").src = src;
 }
 
 async function fetchProduct() {
@@ -54,7 +60,10 @@ async function fetchProduct() {
   try {
     const product = await fetchProductById(productID);
     productDetailsCard(product);
+
+    updateAddToBagButton();
   } catch (error) {
+    console.log(error);
     container.innerHTML = displayError();
   } finally {
     toggleLoader(false);
@@ -69,7 +78,7 @@ function productDetailsCard(product) {
   let galleryHTML = product.images
     .map(
       (image) =>
-        `<img class="thumbnail" src="${image.url}" alt="${product.name}">`
+        `<img class="thumbnail" src="${image.src}" alt="${product.name}">`
     )
     .join("");
 
@@ -81,9 +90,9 @@ function productDetailsCard(product) {
     });
   });
 
-  document.querySelector("#displayed-image").src = product.images[0].url; // Sets the main image to the first image in the array
+  document.querySelector("#displayed-image").src = product.images[0].src; // Sets the main image to the first image in the array
 
-  price.textContent = `$${product.price}`;
+  price.textContent = `$${product.regular_price}`;
 
   const favoriteIcon = document.querySelector(".favorite-product");
   favoriteIcon.setAttribute("data-product-id", product.id);
@@ -91,142 +100,56 @@ function productDetailsCard(product) {
   // Checks if the product is already in the favorites list
   setFavoriteIcon(favoriteIcon, product.id);
 
-  allVariants = product.variants; // This saves all variants to a global variable so they can be used later for filtering
+  let colorAttribute = product.attributes.find(
+    (attr) => attr.name.toLowerCase() === "color"
+  );
+  let sizeAttribute = product.attributes.find(
+    (attr) => attr.name.toLowerCase() === "size"
+  );
 
-  let uniqueColors = [
-    ...new Set(product.variants.map((variant) => variant.color.value)),
-  ]; // Creates an array of unique colors from the variants array
-
-  let colorHTML = uniqueColors
+  let colorHTML = colorAttribute.options
     .map(
       (color) =>
         `<p class="color" data-color="${color}" style="background-color:${color}"></p>`
     )
-    .join(""); // This creates an array of HTML elements for each color, and then joins them into a single string. The data-color attribute is used for filtering. The background-color style is used to display the color.
+    .join("");
 
   colors.innerHTML = colorHTML;
 
-  let uniqueSizes = [
-    ...new Set(product.variants.map((variant) => variant.size.value)),
-  ]; // Creates an array of unique sizes from the variants array
-
-  let sizeHTML = uniqueSizes
+  let sizeHTML = sizeAttribute.options
     .map((size) => `<p class="size-option" data-size="${size}">${size}</p>`)
-    .join(""); // This creates an array of HTML elements for each size, and then joins them into a single string. The data-size attribute is used for filtering.
+    .join("");
 
   sizeOptions.innerHTML = sizeHTML;
 
-  // If only one color of the product is available, it will automatically select it and filter the sizes
-  if (uniqueColors.length === 1) {
-    document.querySelector(".color").classList.add("selected");
-    potentialVariants = allVariants.filter(
-      (v) => v.color.value === uniqueColors[0]
-    );
-
-    // Gets the color name of the only available color and set it
-    const colorObj = product.variants.find(
-      (v) => v.color.value === uniqueColors[0]
-    );
-    if (colorObj) {
-      colorName.textContent = `Color: ${colorObj.color.name}`;
-    }
-  }
-
   description.textContent = product.description;
 
-  addColorAndSizeFilterListeners(); // This adds event listeners to the color and size
-
   updateAddToBagButton();
+  addSelectionListeners();
 }
 
-function resetAllSizes() {
-  document.querySelectorAll(".size-option").forEach((sizeDiv) => {
-    sizeDiv.style.display = "block";
-    sizeDiv.classList.remove("selected");
-    sizeDiv.classList.remove("unavailable");
-  });
-} // This resets all sizes to be visible and removes so that they can be filtered again if a different color is selected
-
-function resetAllColors() {
-  document.querySelectorAll(".color").forEach((colorDiv) => {
-    colorDiv.classList.remove("selected");
-  });
-} // This removes the selected class from all colors so that they can be filtered again if a different color is selected
-
-function filterSizesByColor(selectedColor) {
-  const availableSizes = allVariants
-    .filter((v) => v.color.value === selectedColor)
-    .map((v) => v.size.value); // This creates an array of sizes that are available for the selected color
-
-  document.querySelectorAll(".size-option").forEach((sizeDiv) => {
-    if (!availableSizes.includes(sizeDiv.dataset.size)) {
-      sizeDiv.style.display = "none";
-      sizeDiv.classList.add("unavailable");
-    }
-  }); // This loops through all sizes and hides the ones that are not available for the selected color
-}
-
-function addColorAndSizeFilterListeners() {
+function addSelectionListeners() {
   document.querySelectorAll(".color").forEach((colorDiv) => {
     colorDiv.addEventListener("click", function () {
-      resetAllColors();
+      document.querySelectorAll(".color.selected").forEach((selectedColor) => {
+        selectedColor.classList.remove("selected");
+      });
       this.classList.add("selected");
-
-      // Gets the color name of the clicked color and set it
-      const colorObj = allVariants.find(
-        (v) => v.color.value === this.dataset.color
-      );
-      if (colorObj) {
-        colorName.textContent = `Color: ${colorObj.color.name}`;
-      }
-      resetAllSizes();
-      const selectedColor = this.dataset.color;
-
-      // Stores potential variants that match the selected color
-      potentialVariants = allVariants.filter(
-        (v) => v.color.value === selectedColor
-      );
-
-      filterSizesByColor(selectedColor);
-      selectedVariantID = null; // Resets selected variant if color was changed
-
-      updateAddToBagButton();
     });
   });
 
   document.querySelectorAll(".size-option").forEach((sizeDiv) => {
     sizeDiv.addEventListener("click", function () {
+      document
+        .querySelectorAll(".size-option.selected")
+        .forEach((selectedSize) => {
+          selectedSize.classList.remove("selected");
+        });
+      this.classList.add("selected");
+
       const selectedColor = document.querySelector(".color.selected");
-      if (!selectedColor && document.querySelectorAll(".color").length === 1) {
-        document.querySelector(".color").classList.add("selected");
-        potentialVariants = allVariants.filter(
-          (v) =>
-            v.color.value === document.querySelector(".color").dataset.color
-        );
-      }
-      if (this.classList.contains("selected")) {
-        this.classList.remove("selected");
-        selectedVariantID = null; // Resets selected variant since size was deselected
-      } else {
-        document
-          .querySelectorAll(".size-option.selected")
-          .forEach((selectedSize) => {
-            selectedSize.classList.remove("selected");
-          });
-
-        this.classList.add("selected");
-
-        // Determines the selected variant ID based on the selected size
-        const selectedSize = this.dataset.size;
-        const variant = potentialVariants.find(
-          (v) => v.size.value === selectedSize
-        );
-        if (variant) {
-          selectedVariantID = variant.id;
-        }
-      }
-
-      if (selectedColor && this.classList.contains("selected")) {
+      const selectedSize = document.querySelector(".size-option.selected");
+      if (selectedColor && selectedSize) {
         hideWarningMessage();
       }
 
@@ -238,7 +161,11 @@ function addColorAndSizeFilterListeners() {
 function addToBag(product) {
   let bag = JSON.parse(localStorage.getItem("bag") || "[]");
 
-  let existingItem = bag.find((item) => item.variantID === product.variantID); // Checks if the product variant is already in the bag
+  console.log("this is local storage bag PRODUCT", bag);
+
+  let existingItem = bag.find(
+    (item) => item.variantID === getVariantIdentifier()
+  );
 
   if (existingItem) {
     // Shows a message for 5 seconds if the item is already in the bag
@@ -259,7 +186,6 @@ function checkSelectionsAndProceed(buttonType) {
 
   if (!selectedColor || !selectedSize) {
     showWarningMessage("Please select a color and size.");
-
     return;
   } else {
     hideWarningMessage();
@@ -272,7 +198,7 @@ function checkSelectionsAndProceed(buttonType) {
     color: selectedColor.dataset.color,
     size: selectedSize.dataset.size,
     price: price.textContent,
-    variantID: selectedVariantID,
+    variantID: getVariantIdentifier(),
   }; // This creates an object with all the information about the product that will be added to the bag
 
   let bag = JSON.parse(localStorage.getItem("bag") || "[]");
@@ -296,11 +222,11 @@ function checkSelectionsAndProceed(buttonType) {
 document
   .querySelector("#add-to-bag-button")
   .addEventListener("click", (event) => {
-    checkSelectionsAndProceed("addToBag");
+    checkSelectionsAndProceed("addToBag", productID);
   });
 
 document.querySelector("#buy-now-button").addEventListener("click", (event) => {
-  checkSelectionsAndProceed("buyNow");
+  checkSelectionsAndProceed("buyNow", productID);
   event.preventDefault(); // Prevents the default behavior of the anchor tag so that it doesn't redirect to the shopping bag when no color or size is selected
 });
 

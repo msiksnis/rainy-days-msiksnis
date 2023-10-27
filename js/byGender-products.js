@@ -22,9 +22,9 @@ async function fetchAndFilterProducts() {
   toggleLoader(true);
   try {
     const allProducts = await fetchProducts();
-    const genderSpecificProducts = allProducts.filter(
-      (product) => product.gender === gender // Gender value here that was set in the main tag
-    );
+    const genderSpecificProducts = allProducts.filter((product) =>
+      product.categories.some((category) => category.slug === gender)
+    ); // Gender value here that was set in the main tag
     populateProductCards(genderSpecificProducts);
   } catch (error) {
     container.innerHTML = displayError();
@@ -48,10 +48,12 @@ function populateProductCards(genderSpecificProducts) {
     newCard.querySelector(
       ".product-link"
     ).href = `product-page.html?productId=${product.id}`;
-    newCard.querySelector(".product-image").src = product.images[0].url;
+    newCard.querySelector(".product-image").src = product.images[0].src;
     newCard.querySelector(".product-image").alt = product.name;
     newCard.querySelector(".product-name").textContent = product.name;
-    newCard.querySelector(".product-price").textContent = `$${product.price}`;
+    newCard.querySelector(
+      ".product-price"
+    ).textContent = `$${product.regular_price}`;
     newCard.querySelector(".quick-look-button").dataset.productId = product.id;
 
     productCardsContainer.appendChild(newCard);

@@ -4,6 +4,7 @@ import {
   displayError,
   showTemporaryWarningMessage,
   showWarningMessage,
+  hideWarningMessage,
 } from "./messages.js";
 
 const modal = document.getElementById("quick-look-modal");
@@ -11,39 +12,29 @@ const modalContent = document.querySelector(".modal-content");
 const container = document.querySelector(".container");
 const loader = document.querySelector(".loader");
 
-let allVariants = [];
-let potentialVariants = [];
-let selectedVariantID = null;
+function getVariantIdentifier(productID) {
+  const selectedColor = document.querySelector(".color.selected");
+  const selectedSize = document.querySelector(".size-option.selected");
+  if (selectedColor && selectedSize) {
+    return `${productID}-${selectedColor.dataset.color}-${selectedSize.dataset.size}`;
+  }
+  return null;
+}
 
-function updateAddToBagButton() {
+function updateAddToBagButton(productID) {
   const addToBagButton = document.querySelector("#add-to-bag");
-  const bag = JSON.parse(localStorage.getItem("bag") || "[]");
-  const existingItem = bag.find((item) => item.variantID === selectedVariantID);
+  let bag = JSON.parse(localStorage.getItem("bag") || "[]");
+  let existingItem = bag.find(
+    (item) => item.variantID === getVariantIdentifier(productID)
+  );
 
   if (existingItem) {
     addToBagButton.textContent = "Product is in the Bag";
-    addToBagButton.classList.add("item-in-bag");
+    addToBagButton.classList.add("item-in-bag"); // This is an extra class that is used to style the button differently when the product is already in the bag
   } else {
     addToBagButton.textContent = "Add to Bag";
     addToBagButton.classList.remove("item-in-bag");
   }
-}
-
-function addToBag(product) {
-  let bag = JSON.parse(localStorage.getItem("bag") || "[]");
-  let existingItem = bag.find((item) => item.variantID === product.variantID); // Checks if the product variant is already in the bag
-
-  if (existingItem) {
-    // Shows a message if the item is already in the bag
-    showTemporaryWarningMessage("This product is already in the bag.");
-  } else {
-    // Adds the product to the bag with a quantity of 1
-    product.quantity = 1;
-    bag.push(product);
-    localStorage.setItem("bag", JSON.stringify(bag));
-  }
-
-  updateAddToBagButton();
 }
 
 modal.addEventListener("click", (event) => {
@@ -60,16 +51,17 @@ document.addEventListener("keydown", (event) => {
 
 document.addEventListener("click", function (event) {
   if (event.target.matches(".quick-look-button")) {
-    const productId = event.target.getAttribute("data-product-id");
-    populateModal(productId)
+    const productID = event.target.getAttribute("data-product-id");
+    populateModal(productID)
       .then(() => {
         modal.style.display = "block";
       })
       .catch((error) => {
+        console.log(error);
         document.addEventListener("click", function (event) {
           if (event.target.matches(".quick-look-button")) {
-            const productId = event.target.getAttribute("data-product-id");
-            populateModal(productId).then(() => {
+            const productID = event.target.getAttribute("data-product-id");
+            populateModal(productID).then(() => {
               modal.style.display = "block";
             });
           }
@@ -82,19 +74,15 @@ function toggleLoader(show) {
   loader.style.display = show ? "block" : "none";
 }
 
-async function populateModal(productId) {
+async function populateModal(productID) {
   toggleLoader(true);
   try {
-    const product = await fetchProductById(productId);
+    const product = await fetchProductById(productID);
+    let colorAttr = product.attributes.find((attr) => attr.name === "Color");
+    let sizeAttr = product.attributes.find((attr) => attr.name === "Size");
 
-    allVariants = product.variants;
-
-    let uniqueColors = [
-      ...new Set(allVariants.map((variant) => variant.color.value)),
-    ];
-    let uniqueSizes = [
-      ...new Set(allVariants.map((variant) => variant.size.value)),
-    ];
+    let uniqueColors = colorAttr ? colorAttr.options : [];
+    let uniqueSizes = sizeAttr ? sizeAttr.options : [];
 
     let colorOptionsHTML = uniqueColors
       .map(
@@ -111,7 +99,7 @@ async function populateModal(productId) {
       <div class="modal-product-details-container">
       <span class="material-icons-outlined close-modal-mobile mobile">close</span>
         <img
-          src="${product.images[0].url}"
+          src="${product.images[0].src}"
           alt="${product.name}"
           class="modal-product-image"
         />
@@ -121,7 +109,7 @@ async function populateModal(productId) {
               <div id="modal-product-title">${product.name}</div>
               <span class="material-icons-outlined close-modal desktop">close</span>
             </div>
-            <div id="modal-price">$${product.price}</div>
+            <div id="modal-price">$${product.regular_price}</div>
             <div class="modal-favorite-icon">
               <span class="material-icons-outlined favorite-product" data-product-id="${product.id}">
                 favorite_border
@@ -165,24 +153,19 @@ async function populateModal(productId) {
 
     const favoriteIcon = modalContent.querySelector(".favorite-product");
 
-    setFavoriteIcon(favoriteIcon, productId);
+    setFavoriteIcon(favoriteIcon, productID);
 
     const addToBagButton = document.querySelector("#add-to-bag");
     addToBagButton.addEventListener("click", (event) => {
-      const productTitle = document.getElementById(
-        "modal-product-title"
-      ).textContent;
-      const productImage = document.querySelector(".modal-product-image").src;
-      const productPrice = document.getElementById("modal-price").textContent;
-
       checkSelectionsAndProceed(
-        "addToBag",
-        productId,
-        productTitle,
-        productImage,
-        productPrice
+        product.id,
+        product.name,
+        product.images[0].src,
+        `$${product.regular_price}`
       );
-      event.preventDefault();
+      event.preventDefault(); // Prevents the default action
+
+      event.preventDefault(); // Prevents the default action
     });
 
     document.querySelector(".close-modal").addEventListener("click", () => {
@@ -198,172 +181,110 @@ async function populateModal(productId) {
     // If only one color of the product is available, it will automatically select that color
     if (uniqueColors.length === 1) {
       document.querySelector(".color").classList.add("selected");
-      potentialVariants = allVariants.filter(
-        (v) => v.color.value === uniqueColors[0]
-      );
-
-      // Gets the color name of the only available color and set it
-      const colorObj = allVariants.find(
-        (v) => v.color.value === uniqueColors[0]
-      );
-      if (colorObj) {
-        const colorNameElement = document.querySelector(".color-name");
-        colorNameElement.textContent = `Color: ${colorObj.color.name}`;
-      }
+      const colorNameElement = document.querySelector(".color-name");
+      colorNameElement.textContent = `Color: ${uniqueColors[0]}`;
     }
 
-    addColorAndSizeFilterListeners();
+    if (uniqueColors.length === 1) {
+      const singleColorDiv = document.querySelector(".color");
+      singleColorDiv.classList.add("selected");
+      const colorNameElement = document.querySelector(".color-name");
+      colorNameElement.textContent = `Color: ${singleColorDiv.dataset.color}`;
+    }
+
+    updateAddToBagButton(productID);
   } catch (error) {
+    console.log(error);
     container.innerHTML = displayError();
   } finally {
     toggleLoader(false);
   }
 
-  updateAddToBagButton();
+  addSelectionListeners();
+  updateAddToBagButton(productID);
 }
 
-function addColorAndSizeFilterListeners() {
+function updateButton() {
+  const productID = document
+    .querySelector(".quick-look-button")
+    .getAttribute("data-product-id");
+  updateAddToBagButton(productID);
+}
+
+function addSelectionListeners() {
   document.querySelectorAll(".color").forEach((colorDiv) => {
     colorDiv.addEventListener("click", function () {
-      resetAllColors();
-      this.classList.add("selected");
-
-      resetAllSizes();
-      const selectedColorValue = this.dataset.color;
-
-      // Stores potential variants that match the selected color
-      potentialVariants = allVariants.filter(
-        (v) => v.color.value === selectedColorValue
-      );
-
-      // Gets the color name of the clicked color and set it
-      const colorObj = allVariants.find((v) => {
-        return v.color.value.trim() === selectedColorValue.trim();
+      document.querySelectorAll(".color.selected").forEach((selectedColor) => {
+        selectedColor.classList.remove("selected");
       });
-
-      if (colorObj) {
-        const colorNameElement = document.querySelector(".color-name");
-        colorNameElement.textContent = `Color: ${colorObj.color.name}`;
-      }
-
-      filterSizesByColor(selectedColorValue);
-      selectedVariantID = null; // Resets selected variant since color changed
-
-      updateAddToBagButton();
+      this.classList.add("selected");
+      updateButton();
     });
   });
 
   document.querySelectorAll(".size-option").forEach((sizeDiv) => {
     sizeDiv.addEventListener("click", function () {
-      const selectedColor = document.querySelector(".color.selected");
-      if (!selectedColor && document.querySelectorAll(".color").length === 1) {
-        document.querySelector(".color").classList.add("selected");
-        potentialVariants = allVariants.filter(
-          (v) =>
-            v.color.value === document.querySelector(".color").dataset.color
-        );
-      }
-      if (this.classList.contains("selected")) {
-        this.classList.remove("selected");
-        selectedVariantID = null; // Resets selected variant since size was deselected
-      } else {
-        document
-          .querySelectorAll(".size-option.selected")
-          .forEach((selectedSize) => {
-            selectedSize.classList.remove("selected");
-          });
-
-        this.classList.add("selected");
-
-        // Determines selected variant ID based on the selected size
-        const selectedSize = this.dataset.size;
-        const variant = potentialVariants.find(
-          (v) => v.size.value === selectedSize
-        );
-        if (variant) {
-          selectedVariantID = variant.id;
-        }
-      }
-
-      if (selectedColor && this.classList.contains("selected")) {
-        hideWarningMessage();
-      }
-
-      updateAddToBagButton();
+      document
+        .querySelectorAll(".size-option.selected")
+        .forEach((selectedSize) => {
+          selectedSize.classList.remove("selected");
+        });
+      this.classList.add("selected");
+      updateButton();
     });
   });
 }
 
-function resetAllSizes() {
-  document.querySelectorAll(".size-option").forEach((sizeDiv) => {
-    sizeDiv.style.display = "block";
-    sizeDiv.classList.remove("selected");
-    sizeDiv.classList.remove("unavailable");
-  });
-} // This resets all sizes to be visible so that they can be filtered again if a different color is selected
-
-function resetAllColors() {
-  document.querySelectorAll(".color").forEach((colorDiv) => {
-    colorDiv.classList.remove("selected");
-  });
-} // This removes the selected class from all colors so that they can be filtered again if a different color is selected
-
-function filterSizesByColor(selectedColor) {
-  const availableSizes = allVariants
-    .filter((v) => v.color.value === selectedColor)
-    .map((v) => v.size.value); // This creates an array of sizes that are available for the selected color
-
-  document.querySelectorAll(".size-option").forEach((sizeDiv) => {
-    if (!availableSizes.includes(sizeDiv.dataset.size)) {
-      sizeDiv.style.display = "none";
-      sizeDiv.classList.add("unavailable");
-    }
-  }); // This loops through all sizes and hides the ones that are not available for the selected color
-}
-
-function displayWarningMessage() {
-  const container = document.querySelector("#warning-message-container");
-  container.classList.remove("hidden");
-}
-
-function hideWarningMessage() {
-  const container = document.querySelector("#warning-message-container");
-  container.classList.add("hidden");
-}
-
-function checkSelectionsAndProceed(productId) {
+function checkSelectionsAndProceed(
+  productID,
+  productTitle,
+  productImage,
+  productPrice
+) {
   const selectedColor = document.querySelector(".color.selected");
   const selectedSize = document.querySelector(".size-option.selected");
 
   if (!selectedColor || !selectedSize) {
     showWarningMessage("Please select a color and size.");
-
     return;
   } else {
     hideWarningMessage();
   }
 
-  const productTitle = document.getElementById(
-    "modal-product-title"
-  ).textContent;
-  const productImage = document.querySelector(".modal-product-image").src;
-  const productPriceText = document.getElementById("modal-price").textContent;
-
-  // To parse the price to remove the dollar sign
-  const productPrice = productPriceText.replace("$", "");
-
   const product = {
-    id: productId,
+    id: productID,
     name: productTitle,
     image: productImage,
     color: selectedColor.dataset.color,
     size: selectedSize.dataset.size,
     price: productPrice,
-    variantID: selectedVariantID,
+    variantID: getVariantIdentifier(productID),
   };
 
   addToBag(product);
 
-  // Updates bag count in the header after adding item to the bag
   updateBagCount();
+}
+
+function addToBag(product) {
+  let bag = JSON.parse(localStorage.getItem("bag") || "[]");
+
+  console.log("this is local storage bag MODAL", bag);
+
+  let existingItem = bag.find(
+    (item) =>
+      item.id === product.id &&
+      item.color === product.color &&
+      item.size === product.size
+  );
+
+  if (existingItem) {
+    showTemporaryWarningMessage("This product is already in the bag.");
+  } else {
+    product.quantity = 1;
+    bag.push(product);
+    localStorage.setItem("bag", JSON.stringify(bag));
+  }
+
+  updateAddToBagButton(product.id);
 }

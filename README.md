@@ -1,11 +1,31 @@
-## This is a school project made by Martins Siksnis
+# Rainy Days E-Commerce Project
 
-##### Rainy Days e-commerce website
+## Overview
 
-##### Technologies used: only HTML and CSS
+Rainy Days is a sophisticated e-commerce platform, leveraging HTML, CSS, JavaScript, and WordPress API. It features a dynamic product catalog, specialized for male and female categories, and includes advanced functionalities like favorites and a shopping bag.
 
-##### The website is responsive and should look good on all different size screens
+## Features
 
-##### All the product images, titles and prices are found at rei.com
+- **Dynamic Product Fetching**: Integrates WordPress API for real-time product updates.
+- **Gender-specific Categories**: Separate male and female product sections for tailored user experiences.
+- **Favorites**: Users can mark and store their favorite products in local storage.
+- **Shopping Bag**: A user-friendly shopping bag feature, saving selections in local storage.
+- **Quick Look modal**: A modal window that displays product details, including a larger product image.
+- **Product Specific Page**: A product-specific page that displays product details, including all product images and different variants.
 
-##### Figma link: https://www.figma.com/file/29isX6ZG2TNgzYbvAcTcXr/Rainy-Days?node-id=0%3A1&t=BsjtIB8xV9K1RQxY-1
+## Tech Stack
+
+- HTML5
+- CSS3
+- JavaScript
+- WordPress API
+
+## Installation
+
+1. Clone the repo.
+2. Ensure the WordPress API backend is operational.
+3. Open HTML files in a browser to view the site.
+
+## Contribute
+
+Contributions, issues, and feature requests are welcome. Check our issues page for more details.

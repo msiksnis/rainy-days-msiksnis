@@ -1,8 +1,8 @@
-# Rainy Days E-Commerce Project
+# Rainy Days E-Commerce website
 
 ## Overview
 
-Rainy Days is a sophisticated e-commerce platform, leveraging HTML, CSS, JavaScript, and WordPress API. It features a dynamic product catalog, specialized for male and female categories, and includes advanced functionalities like favorites and a shopping bag.
+Rainy Days is a sophisticated e-commerce platform (developed by Martins Siksnis as school (Noroff) project), leveraging HTML, CSS, JavaScript, and WordPress API. It features a dynamic product catalog, specialized for male and female categories, and includes advanced functionalities like favorites and a shopping bag.
 
 ## Features
 
